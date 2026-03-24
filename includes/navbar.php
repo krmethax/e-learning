@@ -33,6 +33,8 @@
               <li><a href="#">คะแนน</a></li>
               <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                 <li role="separator" class="divider"></li>
+                <li class="dropdown-header">ส่วนผู้ดูแลระบบ</li>
+                <li><a href="<?php echo $path; ?>admin/data_management.php">จัดการข้อมูลระบบ</a></li>
                 <li><a href="<?php echo $path; ?>admin/settings.php">ตั้งค่าระบบ</a></li>
               <?php endif; ?>
               <li role="separator" class="divider"></li>

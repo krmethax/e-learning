@@ -51,6 +51,13 @@ include $path . 'includes/navbar.php';
                 <!-- Middle Column: Database Management -->
                 <div class="col-md-4">
                     <section style="margin-bottom: 30px;">
+                        <h4 style="font-weight: 600; color: #333; margin-bottom: 15px;">ตั้งค่าข้อมูลระบบ</h4>
+                        <ul class="list-unstyled" style="line-height: 2;">
+                            <li><a href="data_management.php" class="text-primary">จัดการข้อมูลคณะ สาขา และรายวิชา</a></li>
+                        </ul>
+                    </section>
+
+                    <section style="margin-bottom: 30px;">
                         <h4 style="font-weight: 600; color: #333; margin-bottom: 15px;">การจัดการฐานข้อมูล</h4>
                         <ul class="list-unstyled" style="line-height: 2;">
                             <li><a href="db_actions.php?action=export" class="text-primary"><span class="glyphicon glyphicon-download-alt"></span> สำรองข้อมูล (Export SQL)</a></li>
@@ -79,11 +86,6 @@ include $path . 'includes/navbar.php';
                             <li><strong>Database Name:</strong> <?php echo $dbname; ?></li>
                         </ul>
                     </section>
-                    
-                    <div class="alert alert-info" style="font-size: 12px;">
-                        <span class="glyphicon glyphicon-info-sign"></span>
-                        การสำรองข้อมูลเป็นประจำจะช่วยป้องกันการสูญหายของข้อมูลสำคัญ
-                    </div>
                 </div>
             </div>
         </div>
