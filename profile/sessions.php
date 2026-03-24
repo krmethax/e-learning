@@ -1,0 +1,87 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$path = '../';
+require_once $path . 'includes/db.php';
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: " . $path . "login/index.php");
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
+$message = '';
+
+// Handle session termination (optional but good practice)
+if (isset($_GET['terminate'])) {
+    $session_id = (int)$_GET['terminate'];
+    if ($conn->query("DELETE FROM browser_sessions WHERE id = $session_id AND user_id = $user_id")) {
+        $message = "ยกเลิกเซสชันเรียบร้อยแล้ว";
+    }
+}
+
+// Fetch sessions
+$stmt = $conn->prepare("SELECT * FROM browser_sessions WHERE user_id = ? ORDER BY last_activity DESC");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$sessions = $stmt->get_result();
+
+include $path . 'includes/header.php';
+include $path . 'includes/navbar.php'; 
+?>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" style="margin-top: 20px; margin-bottom: 40px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Browser sessions</h3>
+                </div>
+                <div class="panel-body">
+                    <p class="text-muted" style="margin-bottom: 20px;">
+                        รายการเซสชันที่ใช้งานอยู่ในปัจจุบันของคุณในเบราว์เซอร์และอุปกรณ์ต่างๆ
+                    </p>
+
+                    <?php if ($message): ?>
+                        <div class="alert alert-success"><?php echo $message; ?></div>
+                    <?php endif; ?>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>เบราว์เซอร์ / อุปกรณ์</th>
+                                    <th>ที่อยู่ IP</th>
+                                    <th>กิจกรรมล่าสุด</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if ($sessions->num_rows > 0): ?>
+                                    <?php while($row = $sessions->fetch_assoc()): ?>
+                                        <tr>
+                                            <td>
+                                                <strong><?php echo htmlspecialchars($row['browser']); ?></strong>
+                                            </td>
+                                            <td><?php echo htmlspecialchars($row['ip_address'] ?? 'Unknown'); ?></td>
+                                            <td>
+                                                <?php echo date('d/m/Y H:i', strtotime($row['last_activity'])); ?>
+                                            </td>
+                                        </tr>
+                                    <?php endwhile; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted">ไม่พบข้อมูลเซสชัน</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php include $path . 'includes/footer.php'; ?>

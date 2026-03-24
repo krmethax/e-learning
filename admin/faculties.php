@@ -13,18 +13,14 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
 $message = '';
 
-// Add Faculty
-if (isset($_POST['add_faculty'])) {
-    $name = $conn->real_escape_string($_POST['faculty_name']);
-    $conn->query("INSERT INTO faculties (faculty_name) VALUES ('$name')");
-    $message = "เพิ่มคณะเรียบร้อยแล้ว";
-}
-
 // Delete Faculty
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
-    $conn->query("DELETE FROM faculties WHERE id = $id");
-    $message = "ลบคณะเรียบร้อยแล้ว";
+    if ($conn->query("DELETE FROM faculties WHERE id = $id")) {
+        $message = "ลบคณะเรียบร้อยแล้ว";
+    } else {
+        $message = "เกิดข้อผิดพลาด: " . $conn->error;
+    }
 }
 
 // Fetch all faculties
@@ -36,66 +32,48 @@ include $path . 'includes/navbar.php';
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12" style="margin-top: 20px; margin-bottom: 40px;">
-            <div class="page-header">
-                <h2>จัดการข้อมูลคณะ</h2>
-            </div>
+        <div class="col-md-12" style="margin-top: 20px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">จัดการข้อมูลคณะ</h3>
+                </div>
+                <div class="panel-body">
 
             <?php if ($message): ?>
                 <div class="alert alert-success"><?php echo $message; ?></div>
             <?php endif; ?>
 
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">เพิ่มคณะใหม่</h3>
-                        </div>
-                        <div class="panel-body">
-                            <form action="faculties.php" method="POST">
-                                <div class="form-group">
-                                    <label>ชื่อคณะ</label>
-                                    <input type="text" name="faculty_name" class="form-control" required>
-                                </div>
-                                <button type="submit" name="add_faculty" class="btn btn-primary btn-block">เพิ่มข้อมูล</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-8">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">รายการคณะทั้งหมด</h3>
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>ชื่อคณะ</th>
-                                        <th width="100">จัดการ</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php while($row = $faculties->fetch_assoc()): ?>
-                                    <tr>
-                                        <td><?php echo $row['id']; ?></td>
-                                        <td><?php echo htmlspecialchars($row['faculty_name']); ?></td>
-                                        <td>
-                                            <a href="faculties.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-xs" onclick="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบคณะนี้? ข้อมูลสาขาและวิชาในคณะจะหายไปด้วย')">ลบ</a>
-                                        </td>
-                                    </tr>
-                                    <?php endwhile; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+            <div class="row" style="margin-bottom: 20px;">
+                <div class="col-md-12 text-right">
+                    <a href="faculty_add.php" class="btn btn-primary">เพิ่มคณะใหม่</a>
                 </div>
             </div>
-            
-            <div class="text-left">
-                <a href="settings.php" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span> กลับไปหน้าตั้งค่า</a>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title" style="font-size: 16px;">รายการคณะทั้งหมด</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>ชื่อคณะ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while($row = $faculties->fetch_assoc()): ?>
+                            <tr>
+                                <td><?php echo $row['id']; ?></td>
+                                <td><?php echo htmlspecialchars($row['faculty_name']); ?></td>
+                            </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+                </div>
             </div>
         </div>
     </div>

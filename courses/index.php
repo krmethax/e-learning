@@ -1,7 +1,7 @@
 <?php $path = '../'; ?>
 <?php include $path . 'includes/header.php'; ?>
 <?php include $path . 'includes/navbar.php'; ?>
-<?php include $path . 'includes/db.php'; ?>
+<?php require_once $path . 'includes/db.php'; ?>
 
 <?php
 // Get parameters
@@ -40,19 +40,7 @@ if ($b_id) {
                     <h3 class="panel-title">รายวิชาออนไลน์</h3>
                 </div>
                 <div class="panel-body">
-
-            <ol class="breadcrumb">
-                <li><a href="index.php">รายวิชา</a></li>
-                <?php if ($f_id): ?>
-                    <li class="<?php echo !$b_id ? 'active' : ''; ?>">
-                        <?php if ($b_id): ?><a href="index.php?f_id=<?php echo $f_id; ?>"><?php echo $current_faculty_name; ?></a><?php else: ?><?php echo $current_faculty_name; ?><?php endif; ?>
-                    </li>
-                <?php endif; ?>
-                <?php if ($b_id): ?>
-                    <li class="active"><?php echo $current_branch_name; ?></li>
-                <?php endif; ?>
-            </ol>
-
+            
             <div class="list-group">
                 <?php
                 if ($b_id) {
@@ -67,17 +55,16 @@ if ($b_id) {
                             echo '<div class="list-group-item">';
                             echo '<div class="row">';
                             echo '<div class="col-md-9">';
-                            echo '<span class="glyphicon glyphicon-book text-muted" style="margin-right: 10px;"></span>';
                             echo htmlspecialchars($row['subject_code']) . ' ' . htmlspecialchars($row['subject_name']);
                             
-                            // Info icon for instructor toggle
-                            echo ' <span class="glyphicon glyphicon-info-sign text-primary instructor-toggle" style="cursor: pointer; margin-left: 5px;" data-target="instr-'.$subject_id.'"></span>';
+                            // Info text for instructor toggle
+                            echo ' <span class="instructor-toggle" style="cursor: pointer; margin-left: 5px; color: #4285F4;" data-target="instr-'.$subject_id.'">[รายละเอียด]</span>';
                             echo '</div>';
                             echo '<div class="col-md-3 text-right">';
                             if (isset($_SESSION['user_id'])) {
-                                echo '<a href="enroll.php?subject_id='.$subject_id.'" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-plus"></span> ลงทะเบียน</a>';
+                                echo '<a href="enroll.php?subject_id='.$subject_id.'" class="btn btn-success btn-xs">ลงทะเบียน</a>';
                             } else {
-                                echo '<a href="../login/index.php" class="btn btn-default btn-xs" title="เข้าสู่ระบบเพื่อลงทะเบียน"><span class="glyphicon glyphicon-lock"></span> เข้าสู่ระบบ</a>';
+                                echo '<a href="../login/index.php" class="btn btn-default btn-xs" title="เข้าสู่ระบบเพื่อลงทะเบียน">เข้าสู่ระบบ</a>';
                             }
                             echo '</div>';
                             echo '</div>';
@@ -117,7 +104,6 @@ if ($b_id) {
                     if ($result->num_rows > 0) {
                         while($row = $result->fetch_assoc()) {
                             echo '<a href="index.php?f_id=' . $f_id . '&b_id=' . $row['id'] . '" class="list-group-item">';
-                            echo '<span class="glyphicon glyphicon-chevron-right text-muted" style="margin-right: 10px;"></span>';
                             echo htmlspecialchars($row['branch_name']);
                             echo '</a>';
                         }
@@ -131,7 +117,6 @@ if ($b_id) {
                     if ($result->num_rows > 0) {
                         while($row = $result->fetch_assoc()) {
                             echo '<a href="index.php?f_id=' . $row['id'] . '" class="list-group-item">';
-                            echo '<span class="glyphicon glyphicon-chevron-right text-muted" style="margin-right: 10px;"></span>';
                             echo htmlspecialchars($row['faculty_name']);
                             echo '</a>';
                         }

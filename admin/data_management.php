@@ -23,74 +23,73 @@ include $path . 'includes/navbar.php';
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12" style="margin-top: 20px; margin-bottom: 40px;">
-            <div class="page-header" style="border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 25px;">
-                <h2 style="font-weight: 600;">จัดการข้อมูลระบบ</h2>
-            </div>
-
-            <div class="row">
-                <!-- Left Column: Organizational Structure -->
-                <div class="col-md-4">
-                    <section style="margin-bottom: 30px;">
-                        <h4 style="font-weight: 600; color: #333; margin-bottom: 15px;">โครงสร้างองค์กร</h4>
-                        <ul class="list-unstyled" style="line-height: 2;">
-                            <li><a href="faculties.php" class="text-primary">จัดการข้อมูลคณะ</a></li>
-                            <li style="margin-top: 5px;">
-                                <strong style="display: block; font-size: 13px; color: #777;">จำนวนคณะทั้งหมด</strong>
-                                <span><?php echo $fac_count; ?> คณะ</span>
-                            </li>
-                            
-                            <li style="margin-top: 15px;"><a href="branches.php" class="text-primary">จัดการข้อมูลสาขาวิชา</a></li>
-                            <li style="margin-top: 5px;">
-                                <strong style="display: block; font-size: 13px; color: #777;">จำนวนสาขาวิชาทั้งหมด</strong>
-                                <span><?php echo $br_count; ?> สาขาวิชา</span>
-                            </li>
-                        </ul>
-                    </section>
+        <div class="col-md-12" style="margin-top: 20px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">จัดการข้อมูลระบบ</h3>
                 </div>
+                <div class="panel-body">
+                    <div class="row" style="margin-top: 20px;">
+                        <!-- Left Column: Organizational Structure -->
+                        <div class="col-md-4">
+                            <section style="margin-bottom: 30px;">
+                                <h4 style="font-weight: 600; color: #333; margin-bottom: 15px;">โครงสร้างองค์กร</h4>
+                                <ul class="list-unstyled" style="line-height: 2;">
+                                    <li><a href="faculties.php" class="text-primary">จัดการข้อมูลคณะ</a></li>
+                                    <li style="margin-top: 5px;">
+                                        <strong style="display: block; font-size: 13px; color: #777;">จำนวนคณะทั้งหมด</strong>
+                                        <span><?php echo $fac_count; ?> คณะ</span>
+                                    </li>
+                                    
+                                    <li style="margin-top: 15px;"><a href="branches.php" class="text-primary">จัดการข้อมูลสาขาวิชา</a></li>
+                                    <li style="margin-top: 5px;">
+                                        <strong style="display: block; font-size: 13px; color: #777;">จำนวนสาขาวิชาทั้งหมด</strong>
+                                        <span><?php echo $br_count; ?> สาขาวิชา</span>
+                                    </li>
+                                </ul>
+                            </section>
+                        </div>
 
-                <!-- Middle Column: Courses and Staff -->
-                <div class="col-md-4">
-                    <section style="margin-bottom: 30px;">
-                        <h4 style="font-weight: 600; color: #333; margin-bottom: 15px;">รายวิชาและบุคลากร</h4>
-                        <ul class="list-unstyled" style="line-height: 2;">
-                            <li><a href="subjects.php" class="text-primary">จัดการข้อมูลรายวิชา</a></li>
-                            <li style="margin-top: 5px;">
-                                <strong style="display: block; font-size: 13px; color: #777;">จำนวนรายวิชาออนไลน์</strong>
-                                <span><?php echo $sub_count; ?> รายวิชา</span>
-                            </li>
+                        <!-- Middle Column: Courses and Staff -->
+                        <div class="col-md-4">
+                            <section style="margin-bottom: 30px;">
+                                <h4 style="font-weight: 600; color: #333; margin-bottom: 15px;">รายวิชาและบุคลากร</h4>
+                                <ul class="list-unstyled" style="line-height: 2;">
+                                    <li><a href="subjects.php" class="text-primary">จัดการข้อมูลรายวิชา</a></li>
+                                    <li style="margin-top: 5px;">
+                                        <strong style="display: block; font-size: 13px; color: #777;">จำนวนรายวิชาออนไลน์</strong>
+                                        <span><?php echo $sub_count; ?> รายวิชา</span>
+                                    </li>
 
-                            <li style="margin-top: 15px;"><a href="instructors.php" class="text-primary">จัดการข้อมูลผู้สอน</a></li>
-                            <li style="margin-top: 5px;">
-                                <strong style="display: block; font-size: 13px; color: #777;">จำนวนอาจารย์ผู้สอน</strong>
-                                <span><?php echo $inst_count; ?> ท่าน</span>
-                            </li>
-                        </ul>
-                    </section>
-                </div>
+                                    <li style="margin-top: 15px;"><a href="instructors.php" class="text-primary">จัดการข้อมูลผู้สอน</a></li>
+                                    <li style="margin-top: 5px;">
+                                        <strong style="display: block; font-size: 13px; color: #777;">จำนวนอาจารย์ผู้สอน</strong>
+                                        <span><?php echo $inst_count; ?> ท่าน</span>
+                                    </li>
+                                </ul>
+                            </section>
+                        </div>
 
-                <!-- Right Column: Quick Stats -->
-                <div class="col-md-4">
-                    <section style="margin-bottom: 30px; padding: 15px; background: #f9f9f9; border-radius: 4px; border: 1px solid #eee;">
-                        <h4 style="font-weight: 600; color: #333; margin-top: 0; margin-bottom: 15px;">สรุปข้อมูลระบบ</h4>
-                        <ul class="list-group" style="margin-bottom: 0;">
-                            <li class="list-group-item d-flex justify-content-between align-items-center" style="background: transparent; border: none; padding: 5px 0;">
-                                คณะ <span class="badge"><?php echo $fac_count; ?></span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center" style="background: transparent; border: none; padding: 5px 0;">
-                                สาขาวิชา <span class="badge"><?php echo $br_count; ?></span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center" style="background: transparent; border: none; padding: 5px 0;">
-                                รายวิชา <span class="badge"><?php echo $sub_count; ?></span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center" style="background: transparent; border: none; padding: 5px 0;">
-                                ผู้สอน <span class="badge"><?php echo $inst_count; ?></span>
-                            </li>
-                        </ul>
-                    </section>
-
-                    <div class="text-center">
-                        <a href="settings.php" class="btn btn-default btn-block"><span class="glyphicon glyphicon-cog"></span> ไปที่หน้าตั้งค่าระบบ</a>
+                        <!-- Right Column: Quick Stats -->
+                        <div class="col-md-4">
+                            <section style="margin-bottom: 30px; padding: 15px; background: #f9f9f9; border-radius: 4px; border: 1px solid #eee;">
+                                <h4 style="font-weight: 600; color: #333; margin-top: 0; margin-bottom: 15px;">สรุปข้อมูลระบบ</h4>
+                                <ul class="list-group" style="margin-bottom: 0;">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center" style="background: transparent; border: none; padding: 5px 0;">
+                                        คณะ <span class="badge"><?php echo $fac_count; ?></span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center" style="background: transparent; border: none; padding: 5px 0;">
+                                        สาขาวิชา <span class="badge"><?php echo $br_count; ?></span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center" style="background: transparent; border: none; padding: 5px 0;">
+                                        รายวิชา <span class="badge"><?php echo $sub_count; ?></span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center" style="background: transparent; border: none; padding: 5px 0;">
+                                        ผู้สอน <span class="badge"><?php echo $inst_count; ?></span>
+                                    </li>
+                                </ul>
+                            </section>
+                        </div>
                     </div>
                 </div>
             </div>

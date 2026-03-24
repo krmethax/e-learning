@@ -48,11 +48,13 @@ include $path . 'includes/navbar.php';
 <div class="container">
     <div class="row">
         <div class="col-md-12" style="margin-top: 20px; margin-bottom: 40px;">
-            <div class="page-header" style="border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 25px;">
-                <h2 style="font-weight: 600;"><?php echo htmlspecialchars($user['full_name']); ?></h2>
-            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><?php echo htmlspecialchars($user['full_name']); ?></h3>
+                </div>
+                <div class="panel-body">
 
-            <div class="row">
+            <div class="row" style="margin-top: 20px;">
                 <!-- Left Column -->
                 <div class="col-md-4">
                     <section style="margin-bottom: 30px;">
@@ -62,19 +64,12 @@ include $path . 'includes/navbar.php';
                             <li style="margin-top: 10px;">
                                 <strong style="display: block; font-size: 13px; color: #777;">อีเมล</strong>
                                 <span><?php echo htmlspecialchars($user['email'] ?: $user['username'].'@ubu.ac.th'); ?></span>
-                                <small class="text-muted" style="display: block; font-size: 11px;">(Visible to other course participants)</small>
+                                <small class="text-muted" style="display: block; font-size: 11px;">(สมาชิกรายวิชาเท่านั้นที่เห็น)</small>
                             </li>
                             <li style="margin-top: 10px;">
                                 <strong style="display: block; font-size: 13px; color: #777;">โซนเวลา</strong>
                                 <span><?php echo htmlspecialchars($user['timezone'] ?: 'Asia/Bangkok'); ?></span>
                             </li>
-                        </ul>
-                    </section>
-
-                    <section style="margin-bottom: 30px;">
-                        <h4 style="font-weight: 600; color: #333; margin-bottom: 15px;">Privacy and policies</h4>
-                        <ul class="list-unstyled" style="line-height: 2;">
-                            <li><a href="#" class="text-primary">Data retention summary</a></li>
                         </ul>
                     </section>
                 </div>
@@ -83,7 +78,6 @@ include $path . 'includes/navbar.php';
                 <div class="col-md-4">
                     <section style="margin-bottom: 30px;">
                         <h4 style="font-weight: 600; color: #333; margin-bottom: 15px;">รายละเอียดของรายวิชา</h4>
-                        <strong style="display: block; font-size: 13px; color: #777;">โปรไฟล์สำหรับรายวิชา</strong>
                         <ul class="list-unstyled" style="line-height: 2;">
                             <?php if (!empty($subjects)): ?>
                                 <?php foreach($subjects as $sub_name): ?>
@@ -99,7 +93,6 @@ include $path . 'includes/navbar.php';
                         <h4 style="font-weight: 600; color: #333; margin-bottom: 15px;">ทั่วไป</h4>
                         <ul class="list-unstyled" style="line-height: 2;">
                             <li><a href="#" class="text-primary">บทความบล็อก (<?php echo $blog_count; ?>)</a></li>
-                            <li><a href="#" class="text-primary">โพสต์</a></li>
                             <li><a href="#" class="text-primary">Forum discussions (<?php echo $forum_count; ?>)</a></li>
                             <li><a href="#" class="text-primary">Learning plans (<?php echo $plan_count; ?>)</a></li>
                         </ul>
@@ -111,8 +104,8 @@ include $path . 'includes/navbar.php';
                     <section style="margin-bottom: 30px;">
                         <h4 style="font-weight: 600; color: #333; margin-bottom: 15px;">รายงาน</h4>
                         <ul class="list-unstyled" style="line-height: 2;">
-                            <li><a href="#" class="text-primary">Browser sessions (<?php echo $session_count; ?>)</a></li>
-                            <li><a href="<?php echo $path; ?>my/index.php" class="text-primary">Grades overview</a></li>
+                            <li><a href="sessions.php" class="text-primary">Browser sessions (<?php echo $session_count; ?>)</a></li>
+                            <li><a href="<?php echo $path; ?>my/index.php" class="text-primary">ภาพรวมเกรด</a></li>
                         </ul>
                     </section>
 
@@ -121,15 +114,14 @@ include $path . 'includes/navbar.php';
                         <ul class="list-unstyled" style="line-height: 2;">
                             <li>
                                 <strong style="display: block; font-size: 13px; color: #777;">ครั้งแรกที่เข้ามายังเว็บไซต์</strong>
-                                <span><?php echo date('l, j F Y, g:iA', strtotime($user['created_at'])); ?></span>
+                                <span><?php echo date('d/m/Y H:i', strtotime($user['created_at'])); ?></span>
                             </li>
                             <li style="margin-top: 10px;">
                                 <strong style="display: block; font-size: 13px; color: #777;">เข้ามายังเว็บไซต์ครั้งสุดท้าย เมื่อ</strong>
                                 <span>
                                     <?php 
                                         if ($user['last_access']) {
-                                            echo date('l, j F Y, g:iA', strtotime($user['last_access']));
-                                            echo ' ('.time() - strtotime($user['last_access']).' วินาที)';
+                                            echo date('d/m/Y H:i', strtotime($user['last_access']));
                                         } else {
                                             echo "เพิ่งเข้าสู่ระบบครั้งแรก";
                                         }
@@ -138,6 +130,9 @@ include $path . 'includes/navbar.php';
                             </li>
                         </ul>
                     </section>
+                </div>
+            </div>
+
                 </div>
             </div>
         </div>

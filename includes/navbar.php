@@ -13,7 +13,24 @@
     <div class="collapse navbar-collapse" id="navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li><a href="<?php echo isset($_SESSION['user_id']) ? $path . 'my/index.php' : $path . 'index.php'; ?>">หน้าแรก</a></li>
-        <li><a href="<?php echo $path; ?>courses/index.php">รายวิชา</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">รายวิชา <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="<?php echo $path; ?>courses/index.php">ดูทั้งหมด</a></li>
+            <li role="separator" class="divider"></li>
+            <li class="dropdown-header">แยกตามคณะ</li>
+            <?php
+              $nav_fac_res = $conn->query("SELECT * FROM faculties ORDER BY faculty_name ASC");
+              if ($nav_fac_res && $nav_fac_res->num_rows > 0):
+                while($nav_fac = $nav_fac_res->fetch_assoc()):
+            ?>
+              <li><a href="<?php echo $path; ?>courses/index.php?f_id=<?php echo $nav_fac['id']; ?>"><?php echo htmlspecialchars($nav_fac['faculty_name']); ?></a></li>
+            <?php 
+                endwhile;
+              endif; 
+            ?>
+          </ul>
+        </li>
         <?php if (isset($_SESSION['user_id'])): ?>
           <li><a href="<?php echo $path; ?>import/index.php">นำเข้ารายชื่อผู้เรียน</a></li>
         <?php endif; ?>
@@ -48,3 +65,4 @@
     </div>
   </div>
 </nav>
+<?php include __DIR__ . '/breadcrumb.php'; ?>

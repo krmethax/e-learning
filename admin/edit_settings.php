@@ -55,9 +55,7 @@ include $path . 'includes/navbar.php';
         <div class="col-md-8 col-md-offset-2" style="margin-top: 20px; margin-bottom: 40px;">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <?php echo $section === 'general' ? 'แก้ไขการตั้งค่าทั่วไป' : 'จัดการฐานข้อมูล (Import)'; ?>
-                    </h3>
+                    <h3 class="panel-title"><?php echo $section === 'general' ? 'แก้ไขการตั้งค่าทั่วไป' : 'จัดการฐานข้อมูล (Import)'; ?></h3>
                 </div>
                 <div class="panel-body">
                     <?php if ($message): ?>
@@ -65,48 +63,57 @@ include $path . 'includes/navbar.php';
                     <?php endif; ?>
 
                     <?php if ($section === 'general'): ?>
-                        <form action="edit_settings.php?section=general" method="POST" class="form-horizontal">
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">ชื่อเว็บไซต์</label>
-                                <div class="col-sm-8">
-                                    <input type="text" name="settings[site_name]" class="form-control" value="<?php echo htmlspecialchars($settings['site_name'] ?? ''); ?>">
+                        <form action="edit_settings.php?section=general" method="POST" class="form-horizontal" style="margin-top: 20px;">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title" style="font-size: 16px;">ข้อมูลทั่วไป</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">ชื่อเว็บไซต์</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" name="settings[site_name]" class="form-control" value="<?php echo htmlspecialchars($settings['site_name'] ?? ''); ?>">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">อีเมลเว็บไซต์</label>
+                                        <div class="col-sm-8">
+                                            <input type="email" name="settings[site_email]" class="form-control" value="<?php echo htmlspecialchars($settings['site_email'] ?? ''); ?>">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">อีเมลเว็บไซต์</label>
-                                <div class="col-sm-8">
-                                    <input type="email" name="settings[site_email]" class="form-control" value="<?php echo htmlspecialchars($settings['site_email'] ?? ''); ?>">
-                                </div>
-                            </div>
-
-                            <div class="form-group" style="margin-top: 30px;">
-                                <div class="col-sm-offset-4 col-sm-8">
-                                    <button type="submit" name="update_settings" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
-                                    <a href="settings.php" class="btn btn-default">ยกเลิก</a>
-                                </div>
+                            <div class="text-center" style="margin-top: 30px;">
+                                <button type="submit" name="update_settings" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
+                                <a href="settings.php" class="btn btn-default">ยกเลิก</a>
                             </div>
                         </form>
 
                     <?php elseif ($section === 'database'): ?>
-                        <form action="edit_settings.php?section=database" method="POST" enctype="multipart/form-data" class="form-horizontal">
+                        <form action="edit_settings.php?section=database" method="POST" enctype="multipart/form-data" class="form-horizontal" style="margin-top: 20px;">
                             <div class="alert alert-warning">
-                                <span class="glyphicon glyphicon-warning-sign"></span> 
                                 <strong>คำเตือน:</strong> การนำเข้าไฟล์ SQL จะทำการเขียนทับข้อมูลปัจจุบันทั้งหมดในฐานข้อมูล
                             </div>
                             
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">เลือกไฟล์ SQL (.sql)</label>
-                                <div class="col-sm-8">
-                                    <input type="file" name="db_file" class="form-control" accept=".sql" required>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title" style="font-size: 16px;">อัปโหลดไฟล์ SQL</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">เลือกไฟล์ SQL (.sql)</label>
+                                        <div class="col-sm-8">
+                                            <input type="file" name="db_file" class="form-control" accept=".sql" required>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="form-group" style="margin-top: 30px;">
-                                <div class="col-sm-offset-4 col-sm-8">
-                                    <button type="submit" name="import_db" class="btn btn-warning">เริ่มการนำเข้าข้อมูล</button>
-                                    <a href="settings.php" class="btn btn-default">ยกเลิก</a>
-                                </div>
+                            <div class="text-center" style="margin-top: 30px;">
+                                <button type="submit" name="import_db" class="btn btn-warning">เริ่มการนำเข้าข้อมูล</button>
+                                <a href="settings.php" class="btn btn-default">ยกเลิก</a>
                             </div>
                         </form>
                     <?php endif; ?>
