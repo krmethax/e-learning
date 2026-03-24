@@ -24,9 +24,15 @@ include $path . 'includes/navbar.php';
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12 text-center" style="margin-top: 50px;">
-            <h1>ยินดีต้อนรับสู่ระบบ E-Learning</h1>
-            <p>หน้าหลักกำลังอยู่ระหว่างการพัฒนา...</p>
+        <div class="col-md-12" style="margin-top: 20px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">ยินดีต้อนรับสู่ระบบ E-Learning</h3>
+                </div>
+                <div class="panel-body text-center">
+                    <p>หน้าหลักกำลังอยู่ระหว่างการพัฒนา...</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>

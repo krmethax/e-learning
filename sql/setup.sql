@@ -45,8 +45,68 @@ CREATE TABLE IF NOT EXISTS users (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    full_name VARCHAR(100) NOT NULL,
+    firstname VARCHAR(100) DEFAULT NULL,
+    lastname VARCHAR(100) DEFAULT NULL,
+    full_name VARCHAR(200) NOT NULL,
+    email VARCHAR(255) DEFAULT NULL,
+    email_display INT(1) DEFAULT 1,
+    moodlenet_id VARCHAR(255) DEFAULT NULL,
+    city VARCHAR(100) DEFAULT NULL,
+    country VARCHAR(100) DEFAULT NULL,
+    timezone VARCHAR(50) DEFAULT 'Asia/Bangkok',
+    description TEXT DEFAULT NULL,
+    profile_image VARCHAR(255) DEFAULT NULL,
+    role VARCHAR(20) DEFAULT 'user',
+    last_access TIMESTAMP NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Table: user_blogs
+CREATE TABLE IF NOT EXISTS user_blogs (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    content TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Table: forum_discussions
+CREATE TABLE IF NOT EXISTS forum_discussions (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11) NOT NULL,
+    subject VARCHAR(255) NOT NULL,
+    message TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Table: learning_plans
+CREATE TABLE IF NOT EXISTS learning_plans (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11) NOT NULL,
+    plan_name VARCHAR(255) NOT NULL,
+    status VARCHAR(50) DEFAULT 'Active',
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Table: browser_sessions
+CREATE TABLE IF NOT EXISTS browser_sessions (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11) NOT NULL,
+    browser VARCHAR(255),
+    ip_address VARCHAR(45),
+    last_activity TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- New Junction Table: user_subjects (Enrollments)
+CREATE TABLE IF NOT EXISTS user_subjects (
+    user_id INT(11) NOT NULL,
+    subject_id INT(11) NOT NULL,
+    PRIMARY KEY (user_id, subject_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

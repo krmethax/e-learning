@@ -34,13 +34,15 @@ if ($b_id) {
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
-            <div class="page-header">
-                <h1>คอร์สเรียนออนไลน์</h1>
-            </div>
+        <div class="col-md-12" style="margin-top: 20px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">รายวิชาออนไลน์</h3>
+                </div>
+                <div class="panel-body">
 
             <ol class="breadcrumb">
-                <li><a href="index.php">คอร์สเรียน</a></li>
+                <li><a href="index.php">รายวิชา</a></li>
                 <?php if ($f_id): ?>
                     <li class="<?php echo !$b_id ? 'active' : ''; ?>">
                         <?php if ($b_id): ?><a href="index.php?f_id=<?php echo $f_id; ?>"><?php echo $current_faculty_name; ?></a><?php else: ?><?php echo $current_faculty_name; ?><?php endif; ?>
@@ -63,13 +65,22 @@ if ($b_id) {
                         while($row = $result->fetch_assoc()) {
                             $subject_id = $row['id'];
                             echo '<div class="list-group-item">';
-                            echo '<a href="../login/index.php" title="เข้าสู่ระบบเพื่อเข้าเรียน">';
-                            echo '<span class="glyphicon glyphicon-chevron-right text-muted" style="margin-right: 10px;"></span>';
+                            echo '<div class="row">';
+                            echo '<div class="col-md-9">';
+                            echo '<span class="glyphicon glyphicon-book text-muted" style="margin-right: 10px;"></span>';
                             echo htmlspecialchars($row['subject_code']) . ' ' . htmlspecialchars($row['subject_name']);
-                            echo '</a>';
                             
                             // Info icon for instructor toggle
                             echo ' <span class="glyphicon glyphicon-info-sign text-primary instructor-toggle" style="cursor: pointer; margin-left: 5px;" data-target="instr-'.$subject_id.'"></span>';
+                            echo '</div>';
+                            echo '<div class="col-md-3 text-right">';
+                            if (isset($_SESSION['user_id'])) {
+                                echo '<a href="enroll.php?subject_id='.$subject_id.'" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-plus"></span> ลงทะเบียน</a>';
+                            } else {
+                                echo '<a href="../login/index.php" class="btn btn-default btn-xs" title="เข้าสู่ระบบเพื่อลงทะเบียน"><span class="glyphicon glyphicon-lock"></span> เข้าสู่ระบบ</a>';
+                            }
+                            echo '</div>';
+                            echo '</div>';
                             
                             // Fetch multiple instructors for this subject
                             $inst_stmt = $conn->prepare("
@@ -130,8 +141,10 @@ if ($b_id) {
                 }
                 ?>
             </div>
+            </div>
         </div>
     </div>
+</div>
 </div>
 
 <script>

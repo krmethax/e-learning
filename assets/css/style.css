@@ -1,13 +1,15 @@
 html, body {
     height: 100%;
+    margin: 0;
 }
 
 body {
     font-family: 'Prompt', sans-serif;
-    background-color: #ffffff; /* White background for clean look */
+    background-color: #ffffff; 
     line-height: 1.6;
     display: flex;
     flex-direction: column;
+    min-height: 100vh; /* Ensure body takes full viewport height */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -16,7 +18,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .content-wrapper {
-    flex: 1 0 auto;
+    flex: 1 0 auto; /* Allow content to grow and push footer down */
 }
 
 .footer {
@@ -100,9 +102,18 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 20px !important;
 }
 
-/* Page Header Reset */
-.page-header {
-    border: none !important;
-    margin: 20px 0 10px 0 !important;
-    padding: 0 !important;
+/* Navbar Profile Image */
+.navbar-profile-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.navbar-nav > li > a {
+    display: flex !important;
+    align-items: center;
 }

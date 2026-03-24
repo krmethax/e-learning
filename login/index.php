@@ -33,6 +33,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['full_name'] = $user['full_name'];
+            $_SESSION['profile_image'] = $user['profile_image'];
+            $_SESSION['role'] = $user['role'];
+
+            // 1. Update last_access
+            $uid = $user['id'];
+            $conn->query("UPDATE users SET last_access = CURRENT_TIMESTAMP WHERE id = $uid");
+
+            // 2. Insert browser session
+            $browser = $_SERVER['HTTP_USER_AGENT'];
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $stmt_sess = $conn->prepare("INSERT INTO browser_sessions (user_id, browser, ip_address) VALUES (?, ?, ?)");
+            $stmt_sess->bind_param("iss", $uid, $browser, $ip);
+            $stmt_sess->execute();
             
             header("Location: " . $path . "my/index.php");
             exit();
