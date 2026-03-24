@@ -72,9 +72,9 @@ if ($action === 'export') {
     
     $conn->query("SET FOREIGN_KEY_CHECKS = 1");
 
-    // Destroy session and redirect to setup
+    // Destroy session and redirect to install
     session_destroy();
-    header("Location: ../set_up.php");
+    header("Location: ../install/index.php");
     exit();
 }
 ?>

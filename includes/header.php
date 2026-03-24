@@ -22,6 +22,10 @@ $site_name = getSetting($conn, 'site_name', 'E-Learning Platform');
     <!-- Font Awesome 4.7.0 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?php echo $path; ?>assets/css/style.css">
 

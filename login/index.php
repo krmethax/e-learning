@@ -5,10 +5,10 @@ if (session_status() === PHP_SESSION_NONE) {
 $path = '../';
 require_once $path . 'includes/db.php';
 
-// Check if any user exists, if not, redirect to setup
+// Check if any user exists, if not, redirect to install
 $check_users = $conn->query("SELECT id FROM users LIMIT 1");
 if (!$check_users || $check_users->num_rows == 0) {
-    header("Location: " . $path . "set_up.php");
+    header("Location: " . $path . "install/index.php");
     exit();
 }
 

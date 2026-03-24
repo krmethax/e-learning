@@ -70,6 +70,7 @@ include $path . 'includes/navbar.php';
                             <tr>
                                 <th>รหัส</th>
                                 <th>ชื่อวิชา</th>
+                                <th>หน่วยกิต</th>
                                 <th>สาขา/คณะ</th>
                                 <th class="text-center" style="width: 100px;">จัดการ</th>
                             </tr>
@@ -78,7 +79,11 @@ include $path . 'includes/navbar.php';
                             <?php while($row = $subjects->fetch_assoc()): ?>
                             <tr>
                                 <td><strong><?php echo htmlspecialchars($row['subject_code']); ?></strong></td>
-                                <td><?php echo htmlspecialchars($row['subject_name']); ?></td>
+                                <td>
+                                    <?php echo htmlspecialchars($row['subject_name']); ?><br>
+                                    <small class="text-muted"><?php echo htmlspecialchars($row['subject_name_en'] ?? ''); ?></small>
+                                </td>
+                                <td><?php echo htmlspecialchars($row['credits'] ?? '-'); ?></td>
                                 <td>
                                     <small class="text-muted">
                                         <?php echo htmlspecialchars($row['faculty_name']); ?><br>

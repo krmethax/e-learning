@@ -71,7 +71,8 @@ include $path . 'includes/navbar.php';
 
             <div class="row" style="margin-bottom: 20px;">
                 <div class="col-md-12 text-right">
-                    <a href="instructor_add.php" class="btn btn-primary">เพิ่มผู้สอนและมอบหมายวิชา</a>
+                    <a href="instructor_add.php" class="btn btn-primary">เพิ่มผู้สอนใหม่</a>
+                    <a href="instructor_assign.php" class="btn btn-success">มอบหมายวิชา</a>
                 </div>
             </div>
 

@@ -1,15 +1,37 @@
 <?php
-$servername = getenv('DB_HOST') ?: "localhost";
-$username = getenv('DB_USER') ?: "root";
-$password = getenv('DB_PASS') ?: "";
-$dbname = getenv('DB_NAME') ?: "elearning_db";
+// Check if config exists, if not redirect to install
+$config_path = __DIR__ . '/config.php';
+if (!file_exists($config_path)) {
+    $install_path = (file_exists('install/index.php')) ? 'install/index.php' : '../install/index.php';
+    // Prevent infinite redirect
+    if (strpos($_SERVER['PHP_SELF'], 'install/index.php') === false) {
+        header("Location: $install_path");
+        exit;
+    }
+} else {
+    require_once $config_path;
+}
+
+$servername = defined('DB_HOST') ? DB_HOST : (getenv('DB_HOST') ?: "localhost");
+$username = defined('DB_USER') ? DB_USER : (getenv('DB_USER') ?: "root");
+$password = defined('DB_PASS') ? DB_PASS : (getenv('DB_PASS') ?: "");
+$dbname = defined('DB_NAME') ? DB_NAME : (getenv('DB_NAME') ?: "elearning_db");
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+try {
+    $conn = @new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    // Check connection
+    if ($conn->connect_error) {
+        if (strpos($_SERVER['PHP_SELF'], 'install/index.php') === false) {
+            die("ฐานข้อมูลยังไม่ได้รับการตั้งค่าอย่างถูกต้อง หรือ MySQL ไม่ทำงาน: " . $conn->connect_error . "<br><a href='install/index.php?force=1'>ไปที่หน้าติดตั้ง</a>");
+        }
+    }
+} catch (mysqli_sql_exception $e) {
+    if (strpos($_SERVER['PHP_SELF'], 'install/index.php') === false) {
+        die("ฐานข้อมูลยังไม่ได้รับการตั้งค่าอย่างถูกต้อง หรือ MySQL ไม่ทำงาน: " . $e->getMessage() . "<br><a href='install/index.php?force=1'>ไปที่หน้าติดตั้ง</a>");
+    }
+    // If we are in install/index.php, the exception will be caught there or it might be ignored if we are just including db.php
 }
 
 // Set UTF-8
@@ -132,6 +154,28 @@ if (!function_exists('syncDatabase')) {
         ];
         foreach ($default_settings as $key => $val) {
             $conn->query("INSERT IGNORE INTO site_settings (setting_key, setting_value) VALUES ('$key', '$val')");
+        }
+
+        // 4. Update subjects table
+        $subject_columns = [
+            'subject_name_en' => "VARCHAR(255) DEFAULT NULL",
+            'credits' => "VARCHAR(50) DEFAULT NULL",
+            'description_th' => "TEXT DEFAULT NULL",
+            'description_en' => "TEXT DEFAULT NULL",
+            'cover_image' => "VARCHAR(255) DEFAULT NULL",
+            'start_date' => "DATETIME DEFAULT NULL", // Enrollment start
+            'end_date' => "DATETIME DEFAULT NULL",   // Enrollment end
+            'course_start' => "DATETIME DEFAULT NULL",
+            'course_end' => "DATETIME DEFAULT NULL",
+            'is_visible' => "TINYINT(1) DEFAULT 1",
+            'enrollment_type' => "VARCHAR(20) DEFAULT 'open'", // 'open' or 'password'
+            'enrollment_key' => "VARCHAR(255) DEFAULT NULL"
+        ];
+        foreach ($subject_columns as $col => $def) {
+            $check = $conn->query("SHOW COLUMNS FROM `subjects` LIKE '$col'");
+            if ($check && $check->num_rows == 0) {
+                $conn->query("ALTER TABLE `subjects` ADD `$col` $def");
+            }
         }
     }
 }

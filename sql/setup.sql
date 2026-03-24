@@ -22,6 +22,18 @@ CREATE TABLE IF NOT EXISTS subjects (
     branch_id INT(11) NOT NULL,
     subject_code VARCHAR(20) NOT NULL,
     subject_name VARCHAR(255) NOT NULL,
+    subject_name_en VARCHAR(255) DEFAULT NULL,
+    credits VARCHAR(50) DEFAULT NULL,
+    description_th TEXT DEFAULT NULL,
+    description_en TEXT DEFAULT NULL,
+    cover_image VARCHAR(255) DEFAULT NULL,
+    start_date DATETIME DEFAULT NULL, -- Enrollment Start
+    end_date DATETIME DEFAULT NULL,   -- Enrollment End
+    course_start DATETIME DEFAULT NULL,
+    course_end DATETIME DEFAULT NULL,
+    is_visible TINYINT(1) DEFAULT 1,
+    enrollment_type VARCHAR(20) DEFAULT 'open',
+    enrollment_key VARCHAR(255) DEFAULT NULL,
     FOREIGN KEY (branch_id) REFERENCES branches(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

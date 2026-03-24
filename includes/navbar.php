@@ -14,7 +14,7 @@
       <ul class="nav navbar-nav">
         <li><a href="<?php echo isset($_SESSION['user_id']) ? $path . 'my/index.php' : $path . 'index.php'; ?>">หน้าแรก</a></li>
         <li><a href="<?php echo $path; ?>courses/index.php">รายวิชา</a></li>
-        <?php if (isset($_SESSION['user_id'])): ?>
+        <?php if (isset($_SESSION['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
           <li><a href="<?php echo $path; ?>import/index.php">นำเข้ารายชื่อผู้เรียน</a></li>
         <?php endif; ?>
       </ul>

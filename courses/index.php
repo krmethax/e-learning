@@ -1,9 +1,7 @@
-<?php $path = '../'; ?>
-<?php include $path . 'includes/header.php'; ?>
-<?php include $path . 'includes/navbar.php'; ?>
-<?php require_once $path . 'includes/db.php'; ?>
+<?php 
+$path = '../'; 
+require_once $path . 'includes/db.php';
 
-<?php
 // Get parameters
 $f_id = isset($_GET['f_id']) ? (int)$_GET['f_id'] : null;
 $b_id = isset($_GET['b_id']) ? (int)$_GET['b_id'] : null;
@@ -30,6 +28,9 @@ if ($b_id) {
         $current_branch_name = $row['branch_name'];
     }
 }
+
+include $path . 'includes/header.php';
+include $path . 'includes/navbar.php'; 
 ?>
 
 <div class="container">
@@ -52,19 +53,42 @@ if ($b_id) {
                     if ($result->num_rows > 0) {
                         while($row = $result->fetch_assoc()) {
                             $subject_id = $row['id'];
+                            $now = date('Y-m-d H:i:s');
+                            $is_open = true;
+                            $lock_reason = "";
+
+                            if (!empty($row['start_date']) && $now < $row['start_date']) {
+                                $is_open = false;
+                                $lock_reason = "วิชานี้จะเปิดในวันที่ " . date('d/m/Y H:i', strtotime($row['start_date']));
+                            }
+                            if (!empty($row['end_date']) && $now > $row['end_date']) {
+                                $is_open = false;
+                                $lock_reason = "วิชานี้ปิดรับลงทะเบียนแล้ว";
+                            }
+
                             echo '<div class="list-group-item">';
-                            echo '<div class="row">';
+                            echo '<div class="row" style="display: flex; align-items: center;">';
+                            
+                            // Cover Image
+                            echo '<div class="col-md-3">';
+                            $cover = !empty($row['cover_image']) ? $path . $row['cover_image'] : "https://via.placeholder.com/260x160?text=No+Image";
+                            echo '<a href="view.php?id='.$subject_id.'"><img src="'.$cover.'" class="img-responsive img-rounded" style="width: 260px; height: 160px; object-fit: cover;"></a>';
+                            echo '</div>';
+
                             echo '<div class="col-md-9" style="color: #007bff; font-weight: 400;">';
-                            echo htmlspecialchars($row['subject_code']) . ' ' . htmlspecialchars($row['subject_name']);
+                            echo '<a href="view.php?id='.$subject_id.'" style="text-decoration: none;">';
+                            echo '<strong>' . htmlspecialchars($row['subject_code']) . '</strong> ' . htmlspecialchars($row['subject_name']);
+                            echo '</a>';
+                            
+                            if ($row['enrollment_type'] === 'password') {
+                                echo ' <i class="fa fa-lock text-muted" title="ต้องใช้รหัสผ่านในการเข้าถึง"></i>';
+                            }
                             
                             // Info text for instructor toggle
                             echo ' <span class="instructor-toggle" style="cursor: pointer; margin-left: 5px; color: #777; font-weight: 300; font-size: 12px;" data-target="instr-'.$subject_id.'">[รายละเอียด]</span>';
-                            echo '</div>';
-                            echo '<div class="col-md-3 text-right">';
-                            if (isset($_SESSION['user_id'])) {
-                                echo '<a href="enroll.php?subject_id='.$subject_id.'" class="btn btn-success btn-xs">ลงทะเบียน</a>';
-                            } else {
-                                echo '<a href="../login/index.php" class="btn btn-default btn-xs" title="เข้าสู่ระบบเพื่อลงทะเบียน">เข้าสู่ระบบ</a>';
+                            
+                            if (!$is_open) {
+                                echo '<br><small class="text-danger"><i class="fa fa-clock-o"></i> ' . $lock_reason . '</small>';
                             }
                             echo '</div>';
                             echo '</div>';
@@ -86,8 +110,33 @@ if ($b_id) {
                             }
                             $instructor_text = !empty($instructors) ? implode(', ', $instructors) : 'ยังไม่ระบุผู้สอน';
 
-                            echo '<div id="instr-'.$subject_id.'" class="instructor-info">';
-                            echo 'ผู้สอน: ' . htmlspecialchars($instructor_text);
+                            echo '<div id="instr-'.$subject_id.'" class="instructor-info" style="display:none; padding: 10px; background: #fafafa; border-radius: 4px; margin-top: 5px; border: 1px solid #eee;">';
+                            echo '<div style="margin-bottom: 5px; border-bottom: 1px solid #eee; padding-bottom: 5px;">';
+                            echo '<strong>' . htmlspecialchars($row['subject_code']) . '</strong> ' . htmlspecialchars($row['subject_name_en'] ?? '');
+                            echo '<br><span style="font-weight: 300;">' . htmlspecialchars($row['subject_name']) . '</span>';
+                            echo '</div>';
+                            
+                            echo '<div style="margin-bottom: 10px;">';
+                            echo '<strong>หน่วยกิต:</strong> ' . htmlspecialchars($row['credits'] ?? '-');
+                            echo '</div>';
+
+                            echo '<div style="margin-bottom: 10px;">';
+                            echo '<strong>ผู้สอน:</strong> ' . htmlspecialchars($instructor_text);
+                            echo '</div>';
+
+                            if (!empty($row['description_th'])) {
+                                echo '<div style="margin-bottom: 15px;">';
+                                echo '<strong>คำอธิบายรายวิชา:</strong><br>';
+                                echo nl2br(htmlspecialchars($row['description_th']));
+                                echo '</div>';
+                            }
+
+                            if (!empty($row['description_en'])) {
+                                echo '<div style="margin-bottom: 10px;">';
+                                echo '<strong>Course Description:</strong><br>';
+                                echo nl2br(htmlspecialchars($row['description_en']));
+                                echo '</div>';
+                            }
                             echo '</div>';
                             
                             echo '</div>';

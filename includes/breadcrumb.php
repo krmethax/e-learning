@@ -20,6 +20,17 @@
                 if (isset($current_branch_name) && !empty($current_branch_name)) {
                     echo '<li class="active">'.htmlspecialchars($current_branch_name).'</li>';
                 }
+            } elseif ($current_dir == 'courses' && $current_file == 'view.php') {
+                echo '<li><a href="'.$path.'courses/index.php">รายวิชา</a></li>';
+                if (isset($subject['faculty_name'])) {
+                    echo '<li><a href="'.$path.'courses/index.php?f_id='.$subject['f_id'].'">'.htmlspecialchars($subject['faculty_name']).'</a></li>';
+                }
+                if (isset($subject['branch_name'])) {
+                    echo '<li><a href="'.$path.'courses/index.php?f_id='.$subject['f_id'].'&b_id='.$subject['b_id'].'">'.htmlspecialchars($subject['branch_name']).'</a></li>';
+                }
+                if (isset($subject['subject_code'])) {
+                    echo '<li class="active">'.htmlspecialchars($subject['subject_code']).'</li>';
+                }
             } elseif ($current_dir == 'courses' && $current_file == 'enroll.php') {
                 echo '<li><a href="'.$path.'courses/index.php">รายวิชา</a></li>';
                 echo '<li class="active">ลงทะเบียน</li>';
