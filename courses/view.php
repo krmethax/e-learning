@@ -28,6 +28,49 @@ if (!$subject) {
     die("ไม่พบรายวิชานี้");
 }
 
+// Redirect if hidden and not admin
+if ($subject['is_visible'] == 0 && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')) {
+    header("Location: index.php");
+    exit();
+}
+
+// Check enrollment status
+$is_enrolled = false;
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $check = $conn->prepare("SELECT * FROM user_subjects WHERE user_id = ? AND subject_id = ?");
+    $check->bind_param("ii", $user_id, $subject_id);
+    $check->execute();
+    if ($check->get_result()->num_rows > 0) {
+        $is_enrolled = true;
+    }
+}
+
+// Check enrollment period (รับสมัคร)
+$now = date('Y-m-d H:i:s');
+$can_enroll = true;
+$enroll_lock_reason = "";
+if (!empty($subject['start_date']) && $now < $subject['start_date']) {
+    $can_enroll = false;
+    $enroll_lock_reason = "เริ่มรับสมัครวันที่ " . date('d/m/Y H:i', strtotime($subject['start_date']));
+}
+if (!empty($subject['end_date']) && $now > $subject['end_date']) {
+    $can_enroll = false;
+    $enroll_lock_reason = "ปิดรับสมัครแล้ว";
+}
+
+// Check course access period (การเปิดเรียน)
+$is_course_active = true;
+$course_lock_reason = "";
+if (!empty($subject['course_start']) && $now < $subject['course_start']) {
+    $is_course_active = false;
+    $course_lock_reason = "วิชานี้จะเริ่มเรียนได้ในวันที่ " . date('d/m/Y H:i', strtotime($subject['course_start']));
+}
+if (!empty($subject['course_end']) && $now > $subject['course_end']) {
+    $is_course_active = false;
+    $course_lock_reason = "วิชานี้ปิดการเข้าเรียนแล้ว";
+}
+
 // Fetch instructors
 $inst_stmt = $conn->prepare("
     SELECT i.instructor_name 
@@ -43,31 +86,6 @@ while($inst_row = $inst_result->fetch_assoc()) {
     $instructors[] = $inst_row['instructor_name'];
 }
 $instructor_text = !empty($instructors) ? implode(', ', $instructors) : 'ยังไม่ระบุผู้สอน';
-
-// Check enrollment status
-$is_enrolled = false;
-if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-    $check = $conn->prepare("SELECT * FROM user_subjects WHERE user_id = ? AND subject_id = ?");
-    $check->bind_param("ii", $user_id, $subject_id);
-    $check->execute();
-    if ($check->get_result()->num_rows > 0) {
-        $is_enrolled = true;
-    }
-}
-
-// Check open/close status
-$now = date('Y-m-d H:i:s');
-$is_open = true;
-$lock_reason = "";
-if (!empty($subject['start_date']) && $now < $subject['start_date']) {
-    $is_open = false;
-    $lock_reason = "วิชานี้จะเปิดในวันที่ " . date('d/m/Y H:i', strtotime($subject['start_date']));
-}
-if (!empty($subject['end_date']) && $now > $subject['end_date']) {
-    $is_open = false;
-    $lock_reason = "วิชานี้ปิดรับลงทะเบียนแล้ว";
-}
 
 include $path . 'includes/header.php';
 include $path . 'includes/navbar.php';
@@ -107,14 +125,18 @@ include $path . 'includes/navbar.php';
 
                     <!-- 3. Enrollment Button -->
                     <div class="row" style="margin-bottom: 30px;">
-                        <div class="col-md-4 col-md-offset-4">
+                        <div class="col-md-4 col-md-offset-4 text-center">
                             <?php if ($is_enrolled): ?>
-                                <a href="<?php echo $path; ?>my/index.php" class="btn btn-primary btn-block">เข้าสู่บทเรียน</a>
+                                <?php if ($is_course_active): ?>
+                                    <a href="<?php echo $path; ?>my/index.php" class="btn btn-primary btn-block">เข้าสู่บทเรียน</a>
+                                <?php else: ?>
+                                    <button class="btn btn-default btn-block" disabled><?php echo $course_lock_reason; ?></button>
+                                <?php endif; ?>
                             <?php elseif (isset($_SESSION['user_id'])): ?>
-                                <?php if ($is_open): ?>
+                                <?php if ($can_enroll): ?>
                                     <a href="enroll.php?subject_id=<?php echo $subject_id; ?>" class="btn btn-success btn-block">ลงทะเบียน</a>
                                 <?php else: ?>
-                                    <button class="btn btn-default btn-block" disabled><?php echo $lock_reason; ?></button>
+                                    <button class="btn btn-default btn-block" disabled><?php echo $enroll_lock_reason; ?></button>
                                 <?php endif; ?>
                             <?php else: ?>
                                 <a href="<?php echo $path; ?>login/index.php" class="btn btn-default btn-block">เข้าสู่ระบบเพื่อลงทะเบียน</a>

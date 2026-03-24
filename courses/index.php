@@ -46,7 +46,7 @@ include $path . 'includes/navbar.php';
                 <?php
                 if ($b_id) {
                     // Level 3: Subjects
-                    $stmt = $conn->prepare("SELECT * FROM subjects WHERE branch_id = ?");
+                    $stmt = $conn->prepare("SELECT * FROM subjects WHERE branch_id = ? AND is_visible = 1");
                     $stmt->bind_param("i", $b_id);
                     $stmt->execute();
                     $result = $stmt->get_result();
@@ -54,16 +54,16 @@ include $path . 'includes/navbar.php';
                         while($row = $result->fetch_assoc()) {
                             $subject_id = $row['id'];
                             $now = date('Y-m-d H:i:s');
-                            $is_open = true;
+                            $can_enroll = true;
                             $lock_reason = "";
 
                             if (!empty($row['start_date']) && $now < $row['start_date']) {
-                                $is_open = false;
-                                $lock_reason = "วิชานี้จะเปิดในวันที่ " . date('d/m/Y H:i', strtotime($row['start_date']));
+                                $can_enroll = false;
+                                $lock_reason = "เริ่มรับสมัครวันที่ " . date('d/m/Y H:i', strtotime($row['start_date']));
                             }
                             if (!empty($row['end_date']) && $now > $row['end_date']) {
-                                $is_open = false;
-                                $lock_reason = "วิชานี้ปิดรับลงทะเบียนแล้ว";
+                                $can_enroll = false;
+                                $lock_reason = "ปิดรับสมัครแล้ว";
                             }
 
                             echo '<div class="list-group-item">';
@@ -87,7 +87,7 @@ include $path . 'includes/navbar.php';
                             // Info text for instructor toggle
                             echo ' <span class="instructor-toggle" style="cursor: pointer; margin-left: 5px; color: #777; font-weight: 300; font-size: 12px;" data-target="instr-'.$subject_id.'">[รายละเอียด]</span>';
                             
-                            if (!$is_open) {
+                            if (!$can_enroll) {
                                 echo '<br><small class="text-danger"><i class="fa fa-clock-o"></i> ' . $lock_reason . '</small>';
                             }
                             echo '</div>';

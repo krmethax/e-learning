@@ -188,23 +188,61 @@ include $path . 'includes/navbar.php';
                                         </select>
                                     </div>
                                 </div>
-                                <hr>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">วันที่เริ่มเปิดวิชา</label>
+                                    <label class="col-sm-3 control-label">การแสดงผล</label>
                                     <div class="col-sm-6">
-                                        <?php 
-                                            $s_date = !empty($subject['start_date']) ? date('Y-m-d H:i', strtotime($subject['start_date'])) : '';
-                                        ?>
-                                        <input type="text" name="start_date" id="start_date" class="form-control" value="<?php echo $s_date; ?>" placeholder="เลือกวันที่และเวลาเริ่ม">
+                                        <select name="is_visible" class="form-control">
+                                            <option value="1" <?php echo ($subject['is_visible'] == 1) ? 'selected' : ''; ?>>แสดงรายวิชา (Show)</option>
+                                            <option value="0" <?php echo ($subject['is_visible'] == 0) ? 'selected' : ''; ?>>ซ่อนรายวิชา (Hide)</option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">วันที่ปิดวิชา</label>
-                                    <div class="col-sm-6">
-                                        <?php 
-                                            $e_date = !empty($subject['end_date']) ? date('Y-m-d H:i', strtotime($subject['end_date'])) : '';
-                                        ?>
-                                        <input type="text" name="end_date" id="end_date" class="form-control" value="<?php echo $e_date; ?>" placeholder="เลือกวันที่และเวลาปิด">
+                                <hr>
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">ตั้งค่าการรับสมัคร (Enrollment)</div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">วันที่เริ่มรับสมัคร</label>
+                                            <div class="col-sm-6">
+                                                <?php 
+                                                    $s_date = !empty($subject['start_date']) ? date('Y-m-d H:i', strtotime($subject['start_date'])) : '';
+                                                ?>
+                                                <input type="text" name="start_date" id="start_date" class="form-control" value="<?php echo $s_date; ?>" placeholder="เลือกวันที่และเวลาเริ่มรับสมัคร">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">วันที่ปิดรับสมัคร</label>
+                                            <div class="col-sm-6">
+                                                <?php 
+                                                    $e_date = !empty($subject['end_date']) ? date('Y-m-d H:i', strtotime($subject['end_date'])) : '';
+                                                ?>
+                                                <input type="text" name="end_date" id="end_date" class="form-control" value="<?php echo $e_date; ?>" placeholder="เลือกวันที่และเวลาปิดรับสมัคร">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-success">
+                                    <div class="panel-heading">ตั้งค่าการเข้าถึงเนื้อหา (Course Access)</div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">วันที่เริ่มเปิดเรียน</label>
+                                            <div class="col-sm-6">
+                                                <?php 
+                                                    $c_s_date = !empty($subject['course_start']) ? date('Y-m-d H:i', strtotime($subject['course_start'])) : '';
+                                                ?>
+                                                <input type="text" name="course_start" id="course_start" class="form-control" value="<?php echo $c_s_date; ?>" placeholder="เลือกวันที่และเวลาเริ่มเปิดเรียน">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">วันที่ปิดเรียน</label>
+                                            <div class="col-sm-6">
+                                                <?php 
+                                                    $c_e_date = !empty($subject['course_end']) ? date('Y-m-d H:i', strtotime($subject['course_end'])) : '';
+                                                ?>
+                                                <input type="text" name="course_end" id="course_end" class="form-control" value="<?php echo $c_e_date; ?>" placeholder="เลือกวันที่และเวลาปิดเรียน">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -264,6 +302,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     flatpickr("#start_date", config);
     flatpickr("#end_date", config);
+    flatpickr("#course_start", config);
+    flatpickr("#course_end", config);
 });
 </script>
 
