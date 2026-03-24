@@ -11,6 +11,12 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 
+// Fetch some stats for display
+$fac_count = $conn->query("SELECT COUNT(*) as total FROM faculties")->fetch_assoc()['total'];
+$br_count = $conn->query("SELECT COUNT(*) as total FROM branches")->fetch_assoc()['total'];
+$sub_count = $conn->query("SELECT COUNT(*) as total FROM subjects")->fetch_assoc()['total'];
+$inst_count = $conn->query("SELECT COUNT(*) as total FROM instructors")->fetch_assoc()['total'];
+
 include $path . 'includes/header.php';
 include $path . 'includes/navbar.php'; 
 ?>
@@ -19,53 +25,74 @@ include $path . 'includes/navbar.php';
     <div class="row">
         <div class="col-md-12" style="margin-top: 20px; margin-bottom: 40px;">
             <div class="page-header" style="border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 25px;">
-                <h2 style="font-weight: 600;">ตั้งค่าข้อมูลระบบ</h2>
+                <h2 style="font-weight: 600;">จัดการข้อมูลระบบ</h2>
             </div>
 
             <div class="row">
-                <!-- Faculty Management -->
-                <div class="col-md-3">
-                    <div class="panel panel-default text-center" style="padding: 20px;">
-                        <span class="glyphicon glyphicon-education" style="font-size: 40px; color: #4285F4; margin-bottom: 15px;"></span>
-                        <h4>จัดการข้อมูลคณะ</h4>
-                        <p class="text-muted small">เพิ่ม ลบ หรือแก้ไขรายชื่อคณะทั้งหมดในระบบ</p>
-                        <a href="faculties.php" class="btn btn-primary btn-block">เข้าสู่เมนู</a>
-                    </div>
+                <!-- Left Column: Organizational Structure -->
+                <div class="col-md-4">
+                    <section style="margin-bottom: 30px;">
+                        <h4 style="font-weight: 600; color: #333; margin-bottom: 15px;">โครงสร้างองค์กร</h4>
+                        <ul class="list-unstyled" style="line-height: 2;">
+                            <li><a href="faculties.php" class="text-primary">จัดการข้อมูลคณะ</a></li>
+                            <li style="margin-top: 5px;">
+                                <strong style="display: block; font-size: 13px; color: #777;">จำนวนคณะทั้งหมด</strong>
+                                <span><?php echo $fac_count; ?> คณะ</span>
+                            </li>
+                            
+                            <li style="margin-top: 15px;"><a href="branches.php" class="text-primary">จัดการข้อมูลสาขาวิชา</a></li>
+                            <li style="margin-top: 5px;">
+                                <strong style="display: block; font-size: 13px; color: #777;">จำนวนสาขาวิชาทั้งหมด</strong>
+                                <span><?php echo $br_count; ?> สาขาวิชา</span>
+                            </li>
+                        </ul>
+                    </section>
                 </div>
 
-                <!-- Branch Management -->
-                <div class="col-md-3">
-                    <div class="panel panel-default text-center" style="padding: 20px;">
-                        <span class="glyphicon glyphicon-list-alt" style="font-size: 40px; color: #34A853; margin-bottom: 15px;"></span>
-                        <h4>จัดการข้อมูลสาขาวิชา</h4>
-                        <p class="text-muted small">จัดการสาขาวิชาต่างๆ โดยแยกตามคณะ</p>
-                        <a href="branches.php" class="btn btn-success btn-block">เข้าสู่เมนู</a>
-                    </div>
+                <!-- Middle Column: Courses and Staff -->
+                <div class="col-md-4">
+                    <section style="margin-bottom: 30px;">
+                        <h4 style="font-weight: 600; color: #333; margin-bottom: 15px;">รายวิชาและบุคลากร</h4>
+                        <ul class="list-unstyled" style="line-height: 2;">
+                            <li><a href="subjects.php" class="text-primary">จัดการข้อมูลรายวิชา</a></li>
+                            <li style="margin-top: 5px;">
+                                <strong style="display: block; font-size: 13px; color: #777;">จำนวนรายวิชาออนไลน์</strong>
+                                <span><?php echo $sub_count; ?> รายวิชา</span>
+                            </li>
+
+                            <li style="margin-top: 15px;"><a href="instructors.php" class="text-primary">จัดการข้อมูลผู้สอน</a></li>
+                            <li style="margin-top: 5px;">
+                                <strong style="display: block; font-size: 13px; color: #777;">จำนวนอาจารย์ผู้สอน</strong>
+                                <span><?php echo $inst_count; ?> ท่าน</span>
+                            </li>
+                        </ul>
+                    </section>
                 </div>
 
-                <!-- Subject Management -->
-                <div class="col-md-3">
-                    <div class="panel panel-default text-center" style="padding: 20px;">
-                        <span class="glyphicon glyphicon-book" style="font-size: 40px; color: #FBBC05; margin-bottom: 15px;"></span>
-                        <h4>จัดการข้อมูลรายวิชา</h4>
-                        <p class="text-muted small">กำหนดรหัสวิชา ชื่อวิชา และสังกัดสาขาวิชา</p>
-                        <a href="subjects.php" class="btn btn-warning btn-block">เข้าสู่เมนู</a>
+                <!-- Right Column: Quick Stats -->
+                <div class="col-md-4">
+                    <section style="margin-bottom: 30px; padding: 15px; background: #f9f9f9; border-radius: 4px; border: 1px solid #eee;">
+                        <h4 style="font-weight: 600; color: #333; margin-top: 0; margin-bottom: 15px;">สรุปข้อมูลระบบ</h4>
+                        <ul class="list-group" style="margin-bottom: 0;">
+                            <li class="list-group-item d-flex justify-content-between align-items-center" style="background: transparent; border: none; padding: 5px 0;">
+                                คณะ <span class="badge"><?php echo $fac_count; ?></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center" style="background: transparent; border: none; padding: 5px 0;">
+                                สาขาวิชา <span class="badge"><?php echo $br_count; ?></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center" style="background: transparent; border: none; padding: 5px 0;">
+                                รายวิชา <span class="badge"><?php echo $sub_count; ?></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center" style="background: transparent; border: none; padding: 5px 0;">
+                                ผู้สอน <span class="badge"><?php echo $inst_count; ?></span>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <div class="text-center">
+                        <a href="settings.php" class="btn btn-default btn-block"><span class="glyphicon glyphicon-cog"></span> ไปที่หน้าตั้งค่าระบบ</a>
                     </div>
                 </div>
-
-                <!-- Instructor Management -->
-                <div class="col-md-3">
-                    <div class="panel panel-default text-center" style="padding: 20px;">
-                        <span class="glyphicon glyphicon-user" style="font-size: 40px; color: #EA4335; margin-bottom: 15px;"></span>
-                        <h4>จัดการข้อมูลผู้สอน</h4>
-                        <p class="text-muted small">จัดการรายชื่อผู้สอนและการมอบหมายวิชา</p>
-                        <a href="instructors.php" class="btn btn-danger btn-block">เข้าสู่เมนู</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center" style="margin-top: 30px;">
-                <a href="settings.php" class="btn btn-default"><span class="glyphicon glyphicon-cog"></span> ไปที่หน้าตั้งค่าระบบ</a>
             </div>
         </div>
     </div>
