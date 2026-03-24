@@ -1,0 +1,108 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Prompt', sans-serif;
+    background-color: #ffffff; /* White background for clean look */
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Prompt', sans-serif;
+    font-weight: 500;
+}
+
+.content-wrapper {
+    flex: 1 0 auto;
+}
+
+.footer {
+    flex-shrink: 0;
+    padding: 20px 0;
+    background-color: #ffffff;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* Global Reset for Course Page Elements */
+.container, .row, .col-md-12 {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Remove all borders from List Group */
+.list-group {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+.list-group-item {
+    border: none !important;
+    background-color: transparent !important;
+    padding: 10px 0 !important; /* Spacing between items */
+    margin-bottom: 0 !important;
+}
+
+.list-group-item:hover, .list-group-item:focus {
+    background-color: transparent !important;
+}
+
+.list-group-item a {
+    text-decoration: none;
+    color: #333;
+}
+
+.list-group-item a:hover {
+    color: #4285F4;
+}
+
+/* Instructor info style */
+.instructor-info {
+    display: none;
+    color: #888;
+    font-size: 13px;
+    margin-left: 25px;
+    margin-top: 5px;
+}
+
+/* Remove all borders from Panels (used in Expand All) */
+.panel {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    margin-bottom: 30px !important;
+}
+
+.panel-heading {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 0 10px 0 !important;
+}
+
+.panel-title {
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+}
+
+.panel-body {
+    padding: 10px 0 !important;
+}
+
+/* Breadcrumb Reset */
+.breadcrumb {
+    background-color: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+    margin-bottom: 20px !important;
+}
+
+/* Page Header Reset */
+.page-header {
+    border: none !important;
+    margin: 20px 0 10px 0 !important;
+    padding: 0 !important;
+}
