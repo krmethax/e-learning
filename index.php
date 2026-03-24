@@ -12,6 +12,12 @@ if (!$check_users || $check_users->num_rows == 0) {
     exit();
 }
 
+// If logged in, redirect to my/index.php
+if (isset($_SESSION['user_id'])) {
+    header("Location: my/index.php");
+    exit();
+}
+
 include $path . 'includes/header.php';
 include $path . 'includes/navbar.php'; 
 ?>

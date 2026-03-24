@@ -50,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !$setup_done) {
 }
 
 include 'includes/header.php';
-include 'includes/navbar.php'; 
 ?>
 
 <div class="container">
@@ -95,4 +94,10 @@ include 'includes/navbar.php';
     </div>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+</div> <!-- .content-wrapper -->
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- Bootstrap 3.4.1 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
