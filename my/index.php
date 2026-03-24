@@ -53,16 +53,26 @@ $result = $stmt->get_result();
                             <?php while($row = $result->fetch_assoc()): ?>
                                 <div class="list-group-item">
                                     <div class="row">
-                                        <div class="col-md-8">
-                                            <h4 class="list-group-item-heading">
-                                                <?php echo htmlspecialchars($row['subject_code']) . ' ' . htmlspecialchars($row['subject_name']); ?>
+                                        <div class="col-md-3">
+                                            <a href="<?php echo $path; ?>courses/course.php?id=<?php echo $row['id']; ?>">
+                                                <?php if (!empty($row['cover_image'])): ?>
+                                                    <img src="<?php echo $path . htmlspecialchars($row['cover_image']); ?>" alt="Cover" class="img-responsive img-rounded" style="width: 100%; height: auto; margin-bottom: 10px;">
+                                                <?php else: ?>
+                                                    <div style="width: 100%; height: 120px; background: #eee; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #999; margin-bottom: 10px;">
+                                                        <i class="fa fa-book fa-3x"></i>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <h4 class="list-group-item-heading" style="margin-top: 5px;">
+                                                <a href="<?php echo $path; ?>courses/course.php?id=<?php echo $row['id']; ?>" style="text-decoration: none; color: #337ab7; font-weight: bold;">
+                                                    <?php echo htmlspecialchars($row['subject_code']) . ' ' . htmlspecialchars($row['subject_name']); ?>
+                                                </a>
                                             </h4>
                                             <p class="list-group-item-text text-muted">
                                                 <?php echo htmlspecialchars($row['faculty_name']) . ' / ' . htmlspecialchars($row['branch_name']); ?>
                                             </p>
-                                        </div>
-                                        <div class="col-md-4 text-right">
-                                            <a href="#" class="btn btn-primary btn-sm">เข้าสู่บทเรียน</a>
                                         </div>
                                     </div>
                                 </div>

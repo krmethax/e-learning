@@ -177,6 +177,113 @@ if (!function_exists('syncDatabase')) {
                 $conn->query("ALTER TABLE `subjects` ADD `$col` $def");
             }
         }
+
+        // 5. Course Content structure
+        $conn->query("CREATE TABLE IF NOT EXISTS course_sections (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            subject_id INT NOT NULL,
+            title VARCHAR(255) NOT NULL,
+            sort_order INT DEFAULT 0,
+            FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+        $conn->query("CREATE TABLE IF NOT EXISTS course_items (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            section_id INT NOT NULL,
+            item_name VARCHAR(255) NOT NULL,
+            item_type VARCHAR(50) NOT NULL,
+            item_content TEXT,
+            sort_order INT DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (section_id) REFERENCES course_sections(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+        // Explicitly add missing columns to course_items if they don't exist
+        $item_cols = [
+            'weight' => "DECIMAL(5,2) DEFAULT 0.00",
+            'max_score' => "DECIMAL(10,2) DEFAULT 0.00"
+        ];
+        foreach ($item_cols as $col => $def) {
+            $check = $conn->query("SHOW COLUMNS FROM `course_items` LIKE '$col'");
+            if ($check && $check->num_rows == 0) {
+                $conn->query("ALTER TABLE `course_items` ADD `$col` $def");
+            }
+        }
+
+        $conn->query("CREATE TABLE IF NOT EXISTS course_grades (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            item_id INT NOT NULL,
+            user_id INT NOT NULL,
+            score DECIMAL(10,2) DEFAULT 0.00,
+            feedback TEXT,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (item_id) REFERENCES course_items(id) ON DELETE CASCADE,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+        $conn->query("CREATE TABLE IF NOT EXISTS course_attendance (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            subject_id INT NOT NULL,
+            user_id INT NOT NULL,
+            check_date DATE NOT NULL,
+            status VARCHAR(20) NOT NULL, -- 'present', 'late', 'absent'
+            remarks TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+        // 7. Forum Tables
+        $conn->query("CREATE TABLE IF NOT EXISTS course_forum_discussions (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            item_id INT NOT NULL,
+            user_id INT NOT NULL,
+            title VARCHAR(255) NOT NULL,
+            message TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (item_id) REFERENCES course_items(id) ON DELETE CASCADE,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+        $conn->query("CREATE TABLE IF NOT EXISTS course_forum_replies (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            discussion_id INT NOT NULL,
+            user_id INT NOT NULL,
+            message TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (discussion_id) REFERENCES course_forum_discussions(id) ON DELETE CASCADE,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+        // 8. Quiz Tables
+        $conn->query("CREATE TABLE IF NOT EXISTS quiz_questions (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            item_id INT NOT NULL,
+            question_text TEXT NOT NULL,
+            question_type VARCHAR(50) DEFAULT 'multiple_choice',
+            points DECIMAL(5,2) DEFAULT 1.00,
+            sort_order INT DEFAULT 0,
+            FOREIGN KEY (item_id) REFERENCES course_items(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+        $conn->query("CREATE TABLE IF NOT EXISTS quiz_options (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            question_id INT NOT NULL,
+            option_text TEXT NOT NULL,
+            is_correct TINYINT(1) DEFAULT 0,
+            FOREIGN KEY (question_id) REFERENCES quiz_questions(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+        $conn->query("CREATE TABLE IF NOT EXISTS quiz_attempts (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            item_id INT NOT NULL,
+            user_id INT NOT NULL,
+            score DECIMAL(10,2) DEFAULT 0.00,
+            started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            finished_at TIMESTAMP NULL,
+            FOREIGN KEY (item_id) REFERENCES course_items(id) ON DELETE CASCADE,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
     }
 }
 

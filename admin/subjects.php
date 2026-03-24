@@ -91,6 +91,9 @@ include $path . 'includes/navbar.php';
                                     </small>
                                 </td>
                                 <td class="text-center">
+                                    <a href="../courses/manage.php?subject_id=<?php echo $row['id']; ?>" title="จัดการเนื้อหา" style="margin-right: 10px; color: #337ab7;">
+                                        <i class="fa fa-list"></i>
+                                    </a>
                                     <a href="subject_edit.php?id=<?php echo $row['id']; ?>" title="แก้ไข" style="margin-right: 10px; color: #333;">
                                         <i class="fa fa-pencil"></i>
                                     </a>

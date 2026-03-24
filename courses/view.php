@@ -128,7 +128,7 @@ include $path . 'includes/navbar.php';
                         <div class="col-md-4 col-md-offset-4 text-center">
                             <?php if ($is_enrolled): ?>
                                 <?php if ($is_course_active): ?>
-                                    <a href="<?php echo $path; ?>my/index.php" class="btn btn-primary btn-block">เข้าสู่บทเรียน</a>
+                                    <a href="course.php?id=<?php echo $subject_id; ?>" class="btn btn-primary btn-block">เข้าสู่บทเรียน</a>
                                 <?php else: ?>
                                     <button class="btn btn-default btn-block" disabled><?php echo $course_lock_reason; ?></button>
                                 <?php endif; ?>
@@ -154,9 +154,9 @@ include $path . 'includes/navbar.php';
                         <p style="text-indent: 30px; line-height: 1.6; font-size: 15px; font-style: italic;"><?php echo !empty($subject['description_en']) ? nl2br(htmlspecialchars($subject['description_en'])) : 'ไม่มีข้อมูล'; ?></p>
                     </div>
 
-                    <?php if (!$is_open && $lock_reason): ?>
+                    <?php if (!$can_enroll && $enroll_lock_reason): ?>
                         <div class="alert alert-warning text-center" style="margin-top: 20px;">
-                            <i class="fa fa-info-circle"></i> <?php echo $lock_reason; ?>
+                            <i class="fa fa-info-circle"></i> <?php echo $enroll_lock_reason; ?>
                         </div>
                     <?php endif; ?>
                 </div>

@@ -20,6 +20,33 @@
                 if (isset($current_branch_name) && !empty($current_branch_name)) {
                     echo '<li class="active">'.htmlspecialchars($current_branch_name).'</li>';
                 }
+            } elseif ($current_dir == 'courses' && $current_file == 'course.php') {
+                echo '<li><a href="'.$path.'my/index.php">รายวิชาของฉัน</a></li>';
+                if (isset($subject['subject_code'])) {
+                    echo '<li class="active">'.htmlspecialchars($subject['subject_code']).'</li>';
+                }
+            } elseif ($current_dir == 'courses' && $current_file == 'lesson.php') {
+                echo '<li><a href="'.$path.'my/index.php">รายวิชาของฉัน</a></li>';
+                if (isset($subject['subject_code'])) {
+                    echo '<li><a href="'.$path.'courses/course.php?id='.$subject_id.'">'.htmlspecialchars($subject['subject_code']).'</a></li>';
+                }
+                if (isset($item['name'])) {
+                    echo '<li class="active">'.htmlspecialchars($item['name']).'</li>';
+                }
+            } elseif ($current_dir == 'courses' && ($current_file == 'grades.php' || $current_file == 'learners.php' || $current_file == 'attendance.php')) {
+                echo '<li><a href="'.$path.'my/index.php">รายวิชาของฉัน</a></li>';
+                if (isset($subject['subject_code'])) {
+                    echo '<li><a href="course.php?id='.$subject_id.'">'.htmlspecialchars($subject['subject_code']).'</a></li>';
+                }
+                if ($current_file == 'grades.php') echo '<li class="active">คะแนน</li>';
+                elseif ($current_file == 'learners.php') echo '<li class="active">ผู้เรียน</li>';
+                elseif ($current_file == 'attendance.php') echo '<li class="active">เช็คชื่อเข้าเรียน</li>';
+            } elseif ($current_dir == 'courses' && $current_file == 'manage.php') {
+                echo '<li><a href="'.$path.'my/index.php">รายวิชาของฉัน</a></li>';
+                if (isset($subject['subject_code'])) {
+                    echo '<li><a href="course.php?id='.$subject_id.'">'.htmlspecialchars($subject['subject_code']).'</a></li>';
+                }
+                echo '<li class="active">จัดการเนื้อหา</li>';
             } elseif ($current_dir == 'courses' && $current_file == 'view.php') {
                 echo '<li><a href="'.$path.'courses/index.php">รายวิชา</a></li>';
                 if (isset($subject['faculty_name'])) {
@@ -40,7 +67,7 @@
                 echo '<li><a href="'.$path.'admin/data_management.php">จัดการข้อมูลระบบ</a></li>';
                 if ($current_file == 'faculties.php' || $current_file == 'faculty_add.php') echo '<li class="active">จัดการข้อมูลคณะ</li>';
                 elseif ($current_file == 'branches.php' || $current_file == 'branch_add.php') echo '<li class="active">จัดการข้อมูลสาขาวิชา</li>';
-                elseif ($current_file == 'subjects.php' || $current_file == 'subject_add.php') echo '<li class="active">จัดการข้อมูลรายวิชา</li>';
+                elseif ($current_file == 'subjects.php' || $current_file == 'subject_add.php' || $current_file == 'subject_edit.php') echo '<li class="active">จัดการข้อมูลรายวิชา</li>';
                 elseif ($current_file == 'instructors.php' || $current_file == 'instructor_add.php') echo '<li class="active">จัดการข้อมูลผู้สอน</li>';
                 elseif ($current_file == 'settings.php') echo '<li class="active">ตั้งค่าระบบ</li>';
                 elseif ($current_file == 'edit_settings.php') echo '<li class="active">แก้ไขการตั้งค่า</li>';
