@@ -45,6 +45,10 @@ include $path . 'includes/navbar.php';
                                         <strong style="display: block; font-size: 13px; color: #777;">อีเมลผู้ดูแลระบบ</strong>
                                         <span><?php echo htmlspecialchars($settings['site_email'] ?? 'admin@ubu.ac.th'); ?></span>
                                     </li>
+                                    <li style="margin-top: 10px;">
+                                        <strong style="display: block; font-size: 13px; color: #777;">เขตเวลาของระบบ</strong>
+                                        <span><?php echo htmlspecialchars($settings['site_timezone'] ?? 'Asia/Bangkok'); ?></span>
+                                    </li>
                                 </ul>
                             </section>
                         </div>
@@ -70,7 +74,8 @@ include $path . 'includes/navbar.php';
                             <section style="margin-bottom: 30px;">
                                 <h4 style="font-weight: 600; color: #333; margin-bottom: 15px;">รายงานระบบ</h4>
                                 <ul class="list-unstyled" style="line-height: 2;">
-                                    <li><a href="#" class="text-primary">ประวัติการเข้าใช้งานทั้งหมด</a></li>
+                                    <li><a href="sessions_all.php" class="text-primary">ประวัติการเข้าใช้งานทั้งหมด</a></li>
+                                    <li><a href="logs.php" class="text-primary">บันทึกประวัติการใช้งานระบบ (Logs)</a></li>
                                     <li><a href="#" class="text-primary">สถิติการลงทะเบียนรายวิชา</a></li>
                                 </ul>
                             </section>

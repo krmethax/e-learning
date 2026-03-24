@@ -85,6 +85,7 @@ include $path . 'includes/navbar.php';
 
                         <div class="text-center">
                             <button type="submit" name="add_subject" class="btn btn-primary">เพิ่มรายวิชา</button>
+                            <a href="subjects.php" class="btn btn-default">ยกเลิก</a>
                         </div>
                     </form>
                 </div>

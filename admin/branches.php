@@ -16,7 +16,12 @@ $message = '';
 // Delete Branch
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
+    // Get info before delete
+    $b_res = $conn->query("SELECT branch_name FROM branches WHERE id = $id");
+    $b_name = ($b_res && $row = $b_res->fetch_assoc()) ? $row['branch_name'] : "Unknown";
+
     if ($conn->query("DELETE FROM branches WHERE id = $id")) {
+        logEvent($conn, 'Delete Branch', "Branch deleted: $b_name (ID: $id)");
         $message = "ลบสาขาวิชาเรียบร้อยแล้ว";
     } else {
         $message = "เกิดข้อผิดพลาด: " . $conn->error;
@@ -65,14 +70,23 @@ include $path . 'includes/navbar.php';
                                 <th>ID</th>
                                 <th>คณะ</th>
                                 <th>ชื่อสาขาวิชา</th>
+                                <th class="text-center" style="width: 100px;">จัดการ</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php while($row = $branches->fetch_assoc()): ?>
                             <tr>
                                 <td><?php echo $row['id']; ?></td>
-                                <td><span class="label label-info"><?php echo htmlspecialchars($row['faculty_name']); ?></span></td>
+                                <td><?php echo htmlspecialchars($row['faculty_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['branch_name']); ?></td>
+                                <td class="text-center">
+                                    <a href="branch_edit.php?id=<?php echo $row['id']; ?>" title="แก้ไข" style="margin-right: 10px; color: #333;">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a href="branches.php?delete=<?php echo $row['id']; ?>" title="ลบ" style="color: #333;" onclick="return confirm('ยืนยันการลบสาขาวิชา?')">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
                             </tr>
                             <?php endwhile; ?>
                         </tbody>

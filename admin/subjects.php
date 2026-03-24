@@ -16,7 +16,12 @@ $message = '';
 // Delete Subject
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
+    // Get info before delete
+    $s_res = $conn->query("SELECT subject_code, subject_name FROM subjects WHERE id = $id");
+    $s_info = ($s_res && $row = $s_res->fetch_assoc()) ? $row['subject_code'] . " " . $row['subject_name'] : "Unknown";
+
     if ($conn->query("DELETE FROM subjects WHERE id = $id")) {
+        logEvent($conn, 'Delete Subject', "Subject deleted: $s_info (ID: $id)");
         $message = "ลบรายวิชาเรียบร้อยแล้ว";
     } else {
         $message = "เกิดข้อผิดพลาด: " . $conn->error;
@@ -66,6 +71,7 @@ include $path . 'includes/navbar.php';
                                 <th>รหัส</th>
                                 <th>ชื่อวิชา</th>
                                 <th>สาขา/คณะ</th>
+                                <th class="text-center" style="width: 100px;">จัดการ</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,6 +84,14 @@ include $path . 'includes/navbar.php';
                                         <?php echo htmlspecialchars($row['faculty_name']); ?><br>
                                         <?php echo htmlspecialchars($row['branch_name']); ?>
                                     </small>
+                                </td>
+                                <td class="text-center">
+                                    <a href="subject_edit.php?id=<?php echo $row['id']; ?>" title="แก้ไข" style="margin-right: 10px; color: #333;">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a href="subjects.php?delete=<?php echo $row['id']; ?>" title="ลบ" style="color: #333;" onclick="return confirm('ยืนยันการลบรายวิชา?')">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
                             <?php endwhile; ?>

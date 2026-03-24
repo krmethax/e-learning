@@ -28,6 +28,25 @@ $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $sessions = $stmt->get_result();
 
+// Helper function for Thai Date
+function thai_date_full($timestamp) {
+    $days = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+    $months = [
+        1 => 'มกราคม', 2 => 'กุมภาพันธ์', 3 => 'มีนาคม', 4 => 'เมษายน',
+        5 => 'พฤษภาคม', 6 => 'มิถุนายน', 7 => 'กรกฎาคม', 8 => 'สิงหาคม',
+        9 => 'กันยายน', 10 => 'ตุลาคม', 11 => 'พฤศจิกายน', 12 => 'ธันวาคม'
+    ];
+    
+    $time = strtotime($timestamp);
+    $day_of_week = $days[date('w', $time)];
+    $day = date('j', $time);
+    $month = $months[(int)date('n', $time)];
+    $year = date('Y', $time);
+    $clock = date('g:iA', $time); // 8:53PM format
+    
+    return "วัน$day_of_week, $day $month $year, $clock";
+}
+
 include $path . 'includes/header.php';
 include $path . 'includes/navbar.php'; 
 ?>
@@ -52,9 +71,9 @@ include $path . 'includes/navbar.php';
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>เบราว์เซอร์ / อุปกรณ์</th>
-                                    <th>ที่อยู่ IP</th>
-                                    <th>กิจกรรมล่าสุด</th>
+                                    <th>เข้าสู่ระบบ</th>
+                                    <th>เข้ามาครั้งสุดท้ายเมื่อ</th>
+                                    <th>หมายเลขไอพีที่ใช้ครั้งสุดท้าย</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -62,11 +81,15 @@ include $path . 'includes/navbar.php';
                                     <?php while($row = $sessions->fetch_assoc()): ?>
                                         <tr>
                                             <td>
-                                                <strong><?php echo htmlspecialchars($row['browser']); ?></strong>
+                                                <div style="font-weight: 400;"><?php echo thai_date_full($row['last_activity']); ?></div>
                                             </td>
-                                            <td><?php echo htmlspecialchars($row['ip_address'] ?? 'Unknown'); ?></td>
                                             <td>
                                                 <?php echo date('d/m/Y H:i', strtotime($row['last_activity'])); ?>
+                                            </td>
+                                            <td>
+                                                <a href="<?php echo $path; ?>plookup/index.php?ip=<?php echo urlencode($row['ip_address']); ?>" class="text-primary">
+                                                    <?php echo htmlspecialchars($row['ip_address'] ?? 'Unknown'); ?>
+                                                </a>
                                             </td>
                                         </tr>
                                     <?php endwhile; ?>

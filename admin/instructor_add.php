@@ -72,6 +72,7 @@ include $path . 'includes/navbar.php';
                                 <div class="form-group">
                                     <div class="col-sm-offset-3 col-sm-6">
                                         <button type="submit" name="add_instructor" class="btn btn-primary">เพิ่มผู้สอน</button>
+                                        <a href="instructors.php" class="btn btn-default">ยกเลิก</a>
                                     </div>
                                 </div>
                             </div>
@@ -111,6 +112,7 @@ include $path . 'includes/navbar.php';
                                 <div class="form-group">
                                     <div class="col-sm-offset-3 col-sm-6">
                                         <button type="submit" name="assign_instructor" class="btn btn-success">มอบหมายวิชา</button>
+                                        <a href="instructors.php" class="btn btn-default">ยกเลิก</a>
                                     </div>
                                 </div>
                             </div>

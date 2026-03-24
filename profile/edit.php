@@ -70,6 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // Fetch current user data
 $user = $conn->query("SELECT * FROM users WHERE id = $user_id")->fetch_assoc();
 
+// Split full_name if firstname/lastname are empty
+if (empty($user['firstname']) && empty($user['lastname']) && !empty($user['full_name'])) {
+    $name_parts = explode(' ', trim($user['full_name']), 2);
+    $user['firstname'] = $name_parts[0] ?? '';
+    $user['lastname'] = $name_parts[1] ?? '';
+}
+
 include $path . 'includes/header.php';
 include $path . 'includes/navbar.php'; 
 ?>
@@ -129,11 +136,18 @@ include $path . 'includes/navbar.php';
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">โซนเวลา</label>
+                                    <label class="col-sm-3 control-label">เขตเวลา (Timezone)</label>
                                     <div class="col-sm-6">
                                         <select name="timezone" class="form-control">
-                                            <option value="Asia/Bangkok" <?php echo ($user['timezone'] ?? 'Asia/Bangkok') == 'Asia/Bangkok' ? 'selected' : ''; ?>>เขตเวลาของเซิร์ฟเวอร์ (Asia/Bangkok)</option>
-                                            <option value="UTC" <?php echo ($user['timezone'] ?? '') == 'UTC' ? 'selected' : ''; ?>>UTC</option>
+                                            <?php
+                                            $current_tz = $user['timezone'] ?: getSetting($conn, 'site_timezone', 'Asia/Bangkok');
+                                            $tzlist = DateTimeZone::listIdentifiers(DateTimeZone::ASIA);
+                                            foreach ($tzlist as $tz) {
+                                                $selected = ($current_tz == $tz) ? 'selected' : '';
+                                                echo "<option value=\"$tz\" $selected>$tz</option>";
+                                            }
+                                            ?>
+                                            <option value="UTC" <?php echo ($current_tz == 'UTC') ? 'selected' : ''; ?>>UTC</option>
                                         </select>
                                     </div>
                                 </div>

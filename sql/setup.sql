@@ -100,6 +100,17 @@ CREATE TABLE IF NOT EXISTS browser_sessions (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Table: system_logs (Audit Logs)
+CREATE TABLE IF NOT EXISTS system_logs (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11) DEFAULT NULL,
+    action VARCHAR(255) NOT NULL,
+    details TEXT,
+    ip_address VARCHAR(45),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- New Junction Table: user_subjects (Enrollments)
 CREATE TABLE IF NOT EXISTS user_subjects (
     user_id INT(11) NOT NULL,

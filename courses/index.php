@@ -54,11 +54,11 @@ if ($b_id) {
                             $subject_id = $row['id'];
                             echo '<div class="list-group-item">';
                             echo '<div class="row">';
-                            echo '<div class="col-md-9">';
+                            echo '<div class="col-md-9" style="color: #007bff; font-weight: 400;">';
                             echo htmlspecialchars($row['subject_code']) . ' ' . htmlspecialchars($row['subject_name']);
                             
                             // Info text for instructor toggle
-                            echo ' <span class="instructor-toggle" style="cursor: pointer; margin-left: 5px; color: #4285F4;" data-target="instr-'.$subject_id.'">[รายละเอียด]</span>';
+                            echo ' <span class="instructor-toggle" style="cursor: pointer; margin-left: 5px; color: #777; font-weight: 300; font-size: 12px;" data-target="instr-'.$subject_id.'">[รายละเอียด]</span>';
                             echo '</div>';
                             echo '<div class="col-md-3 text-right">';
                             if (isset($_SESSION['user_id'])) {
@@ -103,8 +103,8 @@ if ($b_id) {
                     $result = $stmt->get_result();
                     if ($result->num_rows > 0) {
                         while($row = $result->fetch_assoc()) {
-                            echo '<a href="index.php?f_id=' . $f_id . '&b_id=' . $row['id'] . '" class="list-group-item">';
-                            echo htmlspecialchars($row['branch_name']);
+                            echo '<a href="index.php?f_id=' . $f_id . '&b_id=' . $row['id'] . '" class="list-group-item" style="color: #007bff; font-weight: 400;">';
+                            echo '<i class="fa fa-angle-right" style="margin-right: 10px;"></i> ' . htmlspecialchars($row['branch_name']);
                             echo '</a>';
                         }
                     } else {
@@ -116,8 +116,8 @@ if ($b_id) {
                     $result = $conn->query($sql);
                     if ($result->num_rows > 0) {
                         while($row = $result->fetch_assoc()) {
-                            echo '<a href="index.php?f_id=' . $row['id'] . '" class="list-group-item">';
-                            echo htmlspecialchars($row['faculty_name']);
+                            echo '<a href="index.php?f_id=' . $row['id'] . '" class="list-group-item" style="color: #007bff; font-weight: 400;">';
+                            echo '<i class="fa fa-angle-right" style="margin-right: 10px;"></i> ' . htmlspecialchars($row['faculty_name']);
                             echo '</a>';
                         }
                     } else {

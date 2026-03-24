@@ -18,6 +18,7 @@ if (isset($_GET['delete_assign'])) {
     $sid = (int)$_GET['subject_id'];
     $iid = (int)$_GET['instructor_id'];
     if ($conn->query("DELETE FROM subject_instructors WHERE subject_id = $sid AND instructor_id = $iid")) {
+        logEvent($conn, 'Unassign Instructor', "Unassigned instructor (ID: $iid) from subject (ID: $sid)");
         $message = "ยกเลิกการมอบหมายวิชาเรียบร้อยแล้ว";
     } else {
         $message = "เกิดข้อผิดพลาด: " . $conn->error;
@@ -27,7 +28,12 @@ if (isset($_GET['delete_assign'])) {
 // Delete Instructor (Entirely)
 if (isset($_GET['delete_instructor'])) {
     $id = (int)$_GET['delete_instructor'];
+    // Get info
+    $i_res = $conn->query("SELECT instructor_name FROM instructors WHERE id = $id");
+    $i_name = ($i_res && $row = $i_res->fetch_assoc()) ? $row['instructor_name'] : "Unknown";
+
     if ($conn->query("DELETE FROM instructors WHERE id = $id")) {
+        logEvent($conn, 'Delete Instructor', "Instructor deleted: $i_name (ID: $id)");
         $message = "ลบข้อมูลผู้สอนเรียบร้อยแล้ว";
     } else {
         $message = "เกิดข้อผิดพลาด: " . $conn->error;
@@ -80,6 +86,7 @@ include $path . 'includes/navbar.php';
                                     <tr>
                                         <th>ชื่อผู้สอน</th>
                                         <th>วิชาที่สอน</th>
+                                        <th class="text-right" style="width: 50px;">จัดการ</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -89,6 +96,12 @@ include $path . 'includes/navbar.php';
                                         <td>
                                             <small><?php echo htmlspecialchars($row['subject_code']); ?></small><br>
                                             <?php echo htmlspecialchars($row['subject_name']); ?>
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="instructors.php?delete_assign=1&subject_id=<?php echo $row['subject_id']; ?>&instructor_id=<?php echo $row['instructor_id']; ?>" 
+                                               title="ยกเลิกการมอบหมาย" style="color: #333;" onclick="return confirm('ยืนยันการยกเลิกการมอบหมายวิชานี้?')">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                     <?php endwhile; ?>
@@ -106,7 +119,19 @@ include $path . 'includes/navbar.php';
                                 <?php 
                                 while($i = $instructors->fetch_assoc()): ?>
                                     <li class="list-group-item">
-                                        <?php echo htmlspecialchars($i['instructor_name']); ?>
+                                        <div class="row">
+                                            <div class="col-xs-8">
+                                                <?php echo htmlspecialchars($i['instructor_name']); ?>
+                                            </div>
+                                            <div class="col-xs-4 text-right">
+                                                <a href="instructor_edit.php?id=<?php echo $i['id']; ?>" title="แก้ไข" style="margin-right: 5px; color: #333;">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <a href="instructors.php?delete_instructor=<?php echo $i['id']; ?>" title="ลบ" style="color: #333;" onclick="return confirm('ยืนยันการลบผู้สอน?')">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </li>
                                 <?php endwhile; ?>
                             </ul>

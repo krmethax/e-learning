@@ -36,6 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['profile_image'] = $user['profile_image'];
             $_SESSION['role'] = $user['role'];
 
+            // Log activity
+            logEvent($conn, 'Login', 'User logged in: ' . $user['username']);
+
             // 1. Update last_access
             $uid = $user['id'];
             $conn->query("UPDATE users SET last_access = CURRENT_TIMESTAMP WHERE id = $uid");

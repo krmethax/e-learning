@@ -16,7 +16,12 @@ $message = '';
 // Delete Faculty
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
+    // Get name before delete
+    $f_res = $conn->query("SELECT faculty_name FROM faculties WHERE id = $id");
+    $f_name = ($f_res && $row = $f_res->fetch_assoc()) ? $row['faculty_name'] : "Unknown";
+
     if ($conn->query("DELETE FROM faculties WHERE id = $id")) {
+        logEvent($conn, 'Delete Faculty', "Faculty deleted: $f_name (ID: $id)");
         $message = "ลบคณะเรียบร้อยแล้ว";
     } else {
         $message = "เกิดข้อผิดพลาด: " . $conn->error;
@@ -59,6 +64,7 @@ include $path . 'includes/navbar.php';
                             <tr>
                                 <th>ID</th>
                                 <th>ชื่อคณะ</th>
+                                <th class="text-center" style="width: 100px;">จัดการ</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,6 +72,14 @@ include $path . 'includes/navbar.php';
                             <tr>
                                 <td><?php echo $row['id']; ?></td>
                                 <td><?php echo htmlspecialchars($row['faculty_name']); ?></td>
+                                <td class="text-center">
+                                    <a href="faculty_edit.php?id=<?php echo $row['id']; ?>" title="แก้ไข" style="margin-right: 10px; color: #333;">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a href="faculties.php?delete=<?php echo $row['id']; ?>" title="ลบ" style="color: #333;" onclick="return confirm('ยืนยันการลบคณะ?')">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
                             </tr>
                             <?php endwhile; ?>
                         </tbody>

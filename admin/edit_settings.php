@@ -82,6 +82,22 @@ include $path . 'includes/navbar.php';
                                             <input type="email" name="settings[site_email]" class="form-control" value="<?php echo htmlspecialchars($settings['site_email'] ?? ''); ?>">
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">เขตเวลา (Timezone)</label>
+                                        <div class="col-sm-8">
+                                            <select name="settings[site_timezone]" class="form-control">
+                                                <?php
+                                                $tzlist = DateTimeZone::listIdentifiers(DateTimeZone::ASIA);
+                                                foreach ($tzlist as $tz) {
+                                                    $selected = (($settings['site_timezone'] ?? 'Asia/Bangkok') == $tz) ? 'selected' : '';
+                                                    echo "<option value=\"$tz\" $selected>$tz</option>";
+                                                }
+                                                ?>
+                                                <option value="UTC" <?php echo (($settings['site_timezone'] ?? '') == 'UTC') ? 'selected' : ''; ?>>UTC</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

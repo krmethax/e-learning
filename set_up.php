@@ -18,7 +18,9 @@ if ($check_admin && $check_admin->num_rows > 0) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !$setup_done) {
     $admin_user = $conn->real_escape_string($_POST['username']);
     $admin_pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $admin_name = $conn->real_escape_string($_POST['full_name']);
+    $admin_fname = $conn->real_escape_string($_POST['firstname']);
+    $admin_lname = $conn->real_escape_string($_POST['lastname']);
+    $admin_name = trim($admin_fname . ' ' . $admin_lname);
     $admin_email = $conn->real_escape_string($_POST['email']);
     $site_name = $conn->real_escape_string($_POST['site_name']);
 
@@ -34,8 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !$setup_done) {
             } while ($conn->next_result());
 
             // 2. Insert Admin User
-            $stmt = $conn->prepare("INSERT INTO users (username, password, full_name, email, role) VALUES (?, ?, ?, ?, 'admin')");
-            $stmt->bind_param("ssss", $admin_user, $admin_pass, $admin_name, $admin_email);
+            $stmt = $conn->prepare("INSERT INTO users (username, password, full_name, firstname, lastname, email, role) VALUES (?, ?, ?, ?, ?, ?, 'admin')");
+            $stmt->bind_param("ssssss", $admin_user, $admin_pass, $admin_name, $admin_fname, $admin_lname, $admin_email);
             
             if ($stmt->execute()) {
                 // 3. Save Site Settings

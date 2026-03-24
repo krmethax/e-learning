@@ -4,7 +4,8 @@ html, body {
 }
 
 body {
-    font-family: 'Prompt', sans-serif;
+    font-family: 'Kanit', sans-serif;
+    font-weight: 300;
     background-color: #ffffff; 
     line-height: 1.6;
     display: flex;
@@ -13,8 +14,8 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Prompt', sans-serif;
-    font-weight: 500;
+    font-family: 'Kanit', sans-serif;
+    font-weight: 400;
 }
 
 .content-wrapper {
